@@ -1,5 +1,7 @@
 # 骨質疏鬆門診工具
 
+**製作：潘V 醫師｜家醫科**　·　版本 v1.0（2026-07-28）
+
 門診自用的三個單頁工具，純 HTML + CSS + 原生 JavaScript，無外部相依（無 CDN、無外部字型），可離線使用。
 
 **線上版**：https://philia81301-commits.github.io/osteoporosis-clinic/
@@ -24,4 +26,17 @@
 
 本 repo 是工具的唯一位置。沒有 git 的電腦（例如院內電腦）：直接在 GitHub 網頁上編輯檔案並 commit，Pages 同樣會自動重建；要用工具則直接開線上版網址即可。
 
-Google Drive 上的 `01_風險評估`／`02_衛教素材`／`03_藥物選擇` 內的 HTML 是 2026-07-27 的快照，已停止維護；Drive 只保留「專案總覽」Google Doc 當專案基地。
+Google Drive 只保留「專案總覽」Google Doc 當專案基地；原本三個子資料夾內的 HTML 快照已於 2026-07-28 刪除，避免有人下載到過時版本。
+
+改動內容時記得同步更新四個頁面頁尾的**版本號與日期**，那是使用者判斷手上是不是最新版的唯一依據。
+
+## 回報問題
+
+用本 repo 的 [Issues](https://github.com/philia81301-commits/osteoporosis-clinic/issues) 回報錯誤或建議。
+
+## 授權與製作
+
+© 2026 潘V 醫師．本專案採 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant) 授權：
+可自由轉貼分享（含印給病人、教學展示），須署名原作者，禁止商業使用與改作。詳見 [LICENSE](LICENSE)。
+
+臨床內容（風險分層邏輯、選藥決策規則、衛教文案）由潘V 醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。

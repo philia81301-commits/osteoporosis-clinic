@@ -1,0 +1,32 @@
+© 2026 潘V 醫師（家醫科）. All rights reserved.
+
+本專案（骨質疏鬆門診工具：入口頁、骨折風險評估工具、藥物選擇工具、病人衛教單張，
+包含其臨床內容、文字、介面設計與程式碼）採用
+
+    Creative Commons 姓名標示－非商業性－禁止改作 4.0 國際
+    Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+    (CC BY-NC-ND 4.0)
+
+授權條款釋出。
+
+授權全文（繁體中文摘要）：https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant
+授權全文（法律條文）：https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+在遵守下列條件的前提下，您可以自由重製與散布本專案的內容（包含轉貼連結、印給病人、
+在教學場合展示）：
+
+  姓名標示（BY）  — 必須標示原作者「潘V 醫師」與本專案來源，並註明是否有變更。
+  非商業性（NC）  — 不得將本內容用於商業目的（含營利性課程、產品或廣告素材）。
+  禁止改作（ND）  — 不得散布改作、混合或轉換後的衍生版本。
+
+若您希望在上述授權範圍之外使用（例如改作成貴院版本、納入商業產品或課程），
+請透過本專案的 GitHub Issues 與作者聯繫取得個別授權：
+https://github.com/philia81301-commits/osteoporosis-clinic/issues
+
+--
+
+製作說明：本專案的臨床內容（風險分層邏輯、選藥決策規則、衛教文案）由潘V 醫師企劃、
+撰寫並審定；使用者介面與程式實作由 Claude（Anthropic，Claude Code）協助完成。
+
+免責聲明：本專案為門診決策輔助與衛教用途，並非硬性診斷或處方標準，亦不取代醫療專業
+人員之診療。實際診療請結合完整臨床判斷、最新指引、藥品說明書與當期健保給付規定。

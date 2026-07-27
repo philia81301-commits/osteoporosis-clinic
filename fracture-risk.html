@@ -79,6 +79,13 @@
   details.special ul{padding:.3rem 0 .8rem 1.1rem;display:flex;flex-direction:column;gap:.45rem}
   details.special li{font-size:.85rem;color:var(--text2);line-height:1.45}
   .disclaimer{margin-top:1.6rem;font-size:.78rem;color:var(--muted);line-height:1.6;text-align:center;padding:0 1rem}
+ footer.credit{margin-top:1.5rem;padding:1.1rem 1rem 0;border-top:1px solid var(--border);
+               font-size:.78rem;line-height:1.75;color:var(--muted);text-align:center}
+ footer.credit p{margin:.2rem 0}
+ footer.credit .made{font-size:.92rem;color:var(--text2);font-weight:700;margin-bottom:.3rem}
+ footer.credit .made b{color:var(--sky-d)}
+ footer.credit a{color:var(--sky-d);font-weight:700}
+ footer.credit .ai{margin-top:.5rem;font-size:.75rem}
   @media print{
     body{background:#fff}
     .inputCard,.btns,.nav,details.special summary{}
@@ -204,6 +211,13 @@
     本工具為門診決策輔助，分層門檻依實證概念與教學流程設計，並非硬性診斷標準。<br>
     實際治療請結合完整臨床判斷、最新指引與健保給付規定。FRAX 治療門檻預設採常用參考值（主要骨鬆性 ≥20%、髖部 ≥3%），請依院內政策調整。
   </p>
+
+  <footer class="credit">
+    <p class="made">製作：<b>潘V 醫師</b>｜家醫科</p>
+    <p>版本 v1.0（2026-07-28）　·　<a href="https://github.com/philia81301-commits/osteoporosis-clinic/issues" target="_blank" rel="noopener">回報問題或建議</a></p>
+    <p>© 2026 潘V．本工具採 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a> 授權：可自由轉貼分享，須署名，禁止商業使用與改作。</p>
+    <p class="ai">臨床內容由潘V 醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。</p>
+  </footer>
 </div>
 
 <script>

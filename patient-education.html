@@ -153,6 +153,13 @@ table.t th{font-weight:900;background:rgba(14,165,233,.07);color:var(--text);}
 .btn.ghost{background:#fff;color:var(--sky-d);border:1px solid var(--line);}
 
 footer.foot{margin-top:26px;font-size:16px;color:var(--muted);text-align:center;line-height:1.9;}
+footer.credit{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
+              font-size:15px;line-height:1.85;color:var(--muted);text-align:center;}
+footer.credit p{margin:3px 0;}
+footer.credit .made{font-size:17px;color:var(--text2);font-weight:800;margin-bottom:4px;}
+footer.credit .made b{color:var(--sky-d);}
+footer.credit a{color:var(--sky-d);font-weight:800;}
+footer.credit .ai{margin-top:8px;font-size:14px;}
 
 /* ── 列印：全部展開、去掉互動介面 ── */
 @media print{
@@ -525,6 +532,13 @@ footer.foot{margin-top:26px;font-size:16px;color:var(--muted);text-align:center;
 <footer class="foot">
   本單張為門診衛教用途，內容為一般性建議，<b>不能取代醫師針對你個人狀況的診療</b>。<br>
   用藥劑量、療程長短與檢查安排，請以主治醫師指示為準。
+</footer>
+
+<footer class="credit">
+  <p class="made">製作：<b>潘V 醫師</b>｜家醫科</p>
+  <p>版本 v1.0（2026-07-28）　·　<a href="https://github.com/philia81301-commits/osteoporosis-clinic/issues" target="_blank" rel="noopener">回報問題或建議</a></p>
+  <p>© 2026 潘V．本單張採 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a> 授權：可自由轉貼分享，須署名，禁止商業使用與改作。</p>
+  <p class="ai">衛教內容由潘V 醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。</p>
 </footer>
 
 </div>
