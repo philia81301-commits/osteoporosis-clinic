@@ -1,6 +1,6 @@
 # 骨質疏鬆門診工具
 
-**製作：潘V 醫師｜家醫科**　·　版本 v1.0（2026-07-28）
+**製作：潘湘如醫師｜家醫科**　·　版本 v1.0（2026-07-28）
 
 門診自用的三個單頁工具，純 HTML + CSS + 原生 JavaScript，無外部相依（無 CDN、無外部字型），可離線使用。
 
@@ -36,7 +36,7 @@ Google Drive 只保留「專案總覽」Google Doc 當專案基地；原本三�
 
 ## 授權與製作
 
-© 2026 潘V 醫師．本專案採 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant) 授權：
+© 2026 潘湘如醫師．本專案採 [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant) 授權：
 可自由轉貼分享（含印給病人、教學展示），須署名原作者，禁止商業使用與改作。詳見 [LICENSE](LICENSE)。
 
-臨床內容（風險分層邏輯、選藥決策規則、衛教文案）由潘V 醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。
+臨床內容（風險分層邏輯、選藥決策規則、衛教文案）由潘湘如醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。
