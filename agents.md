@@ -1,0 +1,76 @@
+# 骨質疏鬆門診工具（專案藍圖）
+
+> 本檔為跨 Agent 通用的專案藍圖（AGENTS.md 開放標準）。任何 Agent 的每個 session 都應先讀本檔＋`handoff.md`。
+
+## 專案簡介
+
+建立一套完整的骨質疏鬆症門診工具，涵蓋三個環節：**風險評估**（找出高風險病人、量化骨折風險）、**衛教**（讓病人聽得懂、願意配合）、**藥物選擇**（依病人狀況選對藥、講清楚用法與注意事項）。三個工具都是自帶樣式的單頁 HTML，純原生 JavaScript、無任何外部相依，可離線使用，並以公開網址供院內外同事直接開啟。
+
+負責人：潘醫師（減重門診醫師，本專案為骨鬆門診用）。建立日期：2026-07-27。
+
+## 關鍵時程
+
+<!-- 目前沒有明定的對外時程；門診試用回饋後再排修正版 -->
+
+## 目標與路線圖
+
+- [x] 階段一：建立專案工作區與資料夾結構（2026-07-27）
+- [x] 階段二：01 骨折風險評估工具（骨折史 / DXA / FRAX → 風險分層、治療強度、次發性骨鬆 workup）
+- [x] 階段三：02 病人衛教單張（含互動式鈣質攝取計算）
+- [x] 階段四：03 藥物選擇工具（選藥決策、藥物比較表、用藥衛教口語稿、停藥與銜接）
+- [x] 階段五：整套上線 GitHub Pages，取得可分享的公開網址（2026-07-27）
+- [x] 階段六：專案初始化至第三層級（2026-07-28）
+- [ ] 階段七：門診實際試用後的回饋修正
+- [ ] 階段八：決定是否加入固定的院內版健保給付欄（需提供目前依循的版本）
+- [ ] 階段九：產出給 OpenCode 學習的交接包（AGENTS.md + 成果副本，重點寫決策理由與踩過的坑）
+
+## 資料夾結構
+
+```
+C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
+├── agents.md                  本檔（專案藍圖）
+├── handoff.md                 交接檔（開工必讀、收工必更新）
+├── README.md                  repo 說明與更新流程
+├── index.html                 入口頁（三張卡片連到三個工具）
+├── fracture-risk.html         骨折風險評估工具（醫療人員）
+├── drug-selection.html        藥物選擇工具（醫療人員）
+└── patient-education.html     病人衛教單張（給病人）
+```
+
+**Google Drive 發布鏡像**（沿用中文檔名）：`我的雲端硬碟\osteoporosis\`
+- `01_風險評估\骨質疏鬆骨折風險評估工具.html`
+- `02_衛教素材\骨質疏鬆病人衛教單張.html`
+- `03_藥物選擇\骨質疏鬆藥物選擇工具.html`
+- `專案總覽 — 骨質疏鬆風險評估、衛教及藥物選擇`（Google Doc，專案基地，進度與待辦寫在那裡）
+
+## 同步層級（本專案初始化至第三層級）
+
+| 層級 | 平台 | 位置 | 讀取時機 |
+|------|------|------|---------|
+| L1 | 本地（OneDrive\文件） | `agents.md`＋`handoff.md` | 每個 session |
+| L2 | GitHub | [philia81301-commits/osteoporosis-clinic](https://github.com/philia81301-commits/osteoporosis-clinic)（**公開**，供 GitHub Pages） | 指定時 |
+| L3 | Obsidian | `osteoporosis/專案工作流程.md` | 有需要時 |
+
+**線上版（門診與分享用，免登入）**：https://philia81301-commits.github.io/osteoporosis-clinic/
+
+## 更新流程（三處要同步）
+
+1. 改本機 repo 的 HTML
+2. `git commit` + `git push` → GitHub Pages 約 1–2 分鐘自動重建
+3. 複製一份到 `G:\我的雲端硬碟\osteoporosis\` 對應子資料夾（Drive 端用中文檔名）
+
+## 工作約定
+
+- 任何 Agent、任何電腦：**開工先讀 `handoff.md`，收工必更新 `handoff.md`**
+- 修改共用檔案前先讀最新內容，避免覆蓋其他 Agent 的變更
+- 所有回應與文件使用繁體中文
+- 修改前先確認計畫，優先保留原有資料結構
+
+### 本專案特有守則（踩過坑換來的）
+
+- **這是公開 repo**。院內給付條文、任何病人資料都不可放進來；每次 push 前確認新增內容適合公開。
+- **臨床工具的表單必須在載入時強制清空**（`autocomplete="off"` + `load` 後再 reset），否則瀏覽器會復原上一位病人的勾選。
+- **藥名一律同時標學名與常見商品名**（Evenity、Prolia、Forteo、Aclasta、Fosamax、Evista），只寫學名門診找不到藥。
+- **健保給付條文不寫死**（門檻、療程年限、換藥規定會修訂），只註明「請核對當期公告」。
+- **不要用分享 Drive 連結的方式給人用工具**：Drive 預覽器不執行 JavaScript，對方只會看到程式碼。要分享就給 GitHub Pages 網址。
+- 大檔上傳 Drive 走 `G:\` 掛載 `Copy-Item`（同名覆蓋沿用同一 file id），不要用 Drive MCP 的 `create_file`（需貼完整內容）。
