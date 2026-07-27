@@ -4,7 +4,7 @@
 
 ## ⏯️ 目前做到哪
 
-專案初始化完成（L1 + L2 + L3）。三個工具的第一版都已完成並上線 GitHub Pages，Drive 鏡像與專案總覽 Doc 的進度也都同步過了。
+專案初始化完成（L1 + L2 + L3），三個工具第一版已上線 GitHub Pages。2026-07-28 追加：刪除 Drive 的 HTML 快照（Drive 只留專案總覽 Doc）、四個頁面加上署名與版本號、授權定為 CC BY-NC-ND 4.0 並新增 LICENSE。
 
 ## 🚦 目前狀態
 
@@ -22,6 +22,8 @@
 
 - **repo 是公開的**（為了 GitHub Pages）。院內給付條文、病人資料一律不可進 repo。
 - **改動只要兩步**：改本機 repo → `git push`（Pages 自動重建）。2026-07-28 起**已停止維護 Drive 的 HTML 鏡像**，Drive 只保留「專案總覽」Google Doc；那三個資料夾裡的 HTML 是 07-27 快照，不要當最新版用。
+- **改內容時頁尾版本號與日期要一起更新**（目前 v1.0 / 2026-07-28），那是使用者判斷手上是不是最新版的唯一依據；署名與授權區塊不要拿掉。
+- **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名（潘V 醫師｜家醫科）、不掛醫院名。
 - **醫院電腦無法安裝 Google Drive 桌面版**，那裡沒有 `G:\`：用工具就開線上版網址、要改就在 github.com 網頁編輯後 commit、要看專案總覽走 Drive 網頁版。醫院端改過的東西回家記得 `git pull`。
 - repo 位在 OneDrive 內，OneDrive 同步 `.git` 偶爾會鎖檔導致 git 指令失敗；已設 `windows.appendAtomically false`，真的卡住就把 repo 移出 OneDrive。
 - Google Doc 的內容無法用 Drive 連接器修改，要改專案總覽得用 claude-in-chrome 開瀏覽器（擴充功能偶爾沒連上，重試即可）。
