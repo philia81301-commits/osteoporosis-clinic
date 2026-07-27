@@ -22,6 +22,7 @@
 
 - **repo 是公開的**（為了 GitHub Pages）。院內給付條文、病人資料一律不可進 repo。
 - **改動要同步三處**：本機 repo → git push（Pages 自動重建）→ 複製到 `G:\我的雲端硬碟\osteoporosis\` 對應子資料夾（Drive 用中文檔名，本機用英文檔名，內容相同）。
+- **醫院電腦無法安裝 Google Drive 桌面版**，那裡沒有 `G:\`：用工具就開線上版網址、要改就在 github.com 網頁編輯後 commit、要碰 Drive 走網頁版。醫院端改過的東西回家記得 `git pull`。
 - repo 位在 OneDrive 內，OneDrive 同步 `.git` 偶爾會鎖檔導致 git 指令失敗；已設 `windows.appendAtomically false`，真的卡住就把 repo 移出 OneDrive。
 - Google Doc 的內容無法用 Drive 連接器修改，要改專案總覽得用 claude-in-chrome 開瀏覽器（擴充功能偶爾沒連上，重試即可）。
 

@@ -53,11 +53,22 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 **線上版（門診與分享用，免登入）**：https://philia81301-commits.github.io/osteoporosis-clinic/
 
-## 更新流程（三處要同步）
+## 更新流程
+
+### 家用電腦（DESKTOP-LVSV9Q5，有 git、有 Google Drive 桌面版）
 
 1. 改本機 repo 的 HTML
 2. `git commit` + `git push` → GitHub Pages 約 1–2 分鐘自動重建
 3. 複製一份到 `G:\我的雲端硬碟\osteoporosis\` 對應子資料夾（Drive 端用中文檔名）
+
+### 醫院電腦（**無法安裝 Google Drive 桌面版**，可能也沒有 git）
+
+- **只是要用工具** → 直接開線上版網址，不需安裝、登入或下載
+- **要改工具** → 在 github.com 的 repo 頁面直接編輯檔案並 commit，Pages 會自動重建（純瀏覽器，不需 git）
+- **要存取 Drive** → 用 `drive.google.com` 網頁版手動上傳／下載，**沒有 `G:\` 可用**
+- ⚠️ 醫院端做的改動記得回家後 `git pull`，避免本機 repo 落後
+
+> 因此：`G:\` 相關的一切（`Copy-Item` 上傳、同名覆蓋沿用 file id）只適用於家用電腦。
 
 ## 工作約定
 
@@ -73,4 +84,4 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 - **藥名一律同時標學名與常見商品名**（Evenity、Prolia、Forteo、Aclasta、Fosamax、Evista），只寫學名門診找不到藥。
 - **健保給付條文不寫死**（門檻、療程年限、換藥規定會修訂），只註明「請核對當期公告」。
 - **不要用分享 Drive 連結的方式給人用工具**：Drive 預覽器不執行 JavaScript，對方只會看到程式碼。要分享就給 GitHub Pages 網址。
-- 大檔上傳 Drive 走 `G:\` 掛載 `Copy-Item`（同名覆蓋沿用同一 file id），不要用 Drive MCP 的 `create_file`（需貼完整內容）。
+- 大檔上傳 Drive 走 `G:\` 掛載 `Copy-Item`（同名覆蓋沿用同一 file id），不要用 Drive MCP 的 `create_file`（需貼完整內容）。**但 `G:\` 只有家用電腦有**——醫院電腦無法安裝 Google Drive 桌面版，那裡一律走瀏覽器（線上版網址 + github.com 網頁編輯 + Drive 網頁版）。
