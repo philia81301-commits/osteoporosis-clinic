@@ -4,7 +4,7 @@
 
 ## ⏯️ 目前做到哪
 
-專案初始化完成（L1 + L2 + L3），三個工具第一版已上線 GitHub Pages。2026-07-28 追加：刪除 Drive 的 HTML 快照（Drive 只留專案總覽 Doc）、四個頁面加上署名與版本號、授權定為 CC BY-NC-ND 4.0 並新增 LICENSE。
+專案初始化完成（L1 + L2 + L3），三個工具第一版已上線 GitHub Pages。2026-07-28 追加：刪除 Drive 的 HTML 快照（Drive 只留專案總覽 Doc）、四個頁面加上署名與版本號、授權定為 CC BY-NC-ND 4.0 並新增 LICENSE、**家用工作副本從 OneDrive 搬到 `C:\projects\osteoporosis-clinic\`**（跨電腦改為純 git 同步）。
 
 ## 🚦 目前狀態
 
@@ -24,13 +24,13 @@
 - **改動只要兩步**：改本機 repo → `git push`（Pages 自動重建）。2026-07-28 起**已停止維護 Drive 的 HTML 鏡像**，Drive 只保留「專案總覽」Google Doc；那三個資料夾裡的 HTML 是 07-27 快照，不要當最新版用。
 - **改內容時頁尾版本號與日期要一起更新**（目前 v1.0 / 2026-07-28），那是使用者判斷手上是不是最新版的唯一依據；署名與授權區塊不要拿掉。
 - **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名（潘湘如醫師｜家醫科）、不掛醫院名。
-- **醫院電腦有 Claude Code 與 GitHub**，流程跟家裡一樣（改檔 → commit → push）；只是**無法安裝 Google Drive 桌面版**（沒有 `G:\`，已不依賴）。醫院那台 `git clone` 一份工作副本，**路徑放在 OneDrive 以外**（例如 `C:\projects\`）。**開工先 `git pull`、收工更新 handoff.md 後 push**，兩台才接得上。
-- ⚠️ **不要用 OneDrive 同步這個 repo 給兩台共用**（醫院那台也有 OneDrive）。OneDrive 同步 `.git` 會造成 lock 衝突與衝突複本。跨電腦一律靠 git。
-- repo 位在 OneDrive 內，OneDrive 同步 `.git` 偶爾會鎖檔導致 git 指令失敗；已設 `windows.appendAtomically false`，真的卡住就把 repo 移出 OneDrive。
+- **兩台電腦都有 Claude Code 與 GitHub**，流程相同：`git pull` → 改檔 → commit → push → 收工更新 handoff.md 再 push。家用工作副本在 `C:\projects\osteoporosis-clinic\`；醫院那台自行 `git clone`，**路徑同樣放在 OneDrive 以外**。醫院無法安裝 Google Drive 桌面版（沒有 `G:\`，本專案已不依賴）。
+- ⚠️ **不要用 OneDrive 同步這個 repo**。OneDrive 同步 `.git` 會造成 lock 衝突與衝突複本；跨電腦一律靠 git。檔案分工：程式碼走 git、Excel／PPT／Word／分析產出／Obsidian vault 走 OneDrive。
+- 舊的 OneDrive 工作副本已移到 `C:\projects\_osteoporosis_舊OneDrive副本\`（內容與 GitHub 相同，確認無誤後可自行刪除）。
 - Google Doc 的內容無法用 Drive 連接器修改，要改專案總覽得用 claude-in-chrome 開瀏覽器（擴充功能偶爾沒連上，重試即可）。
 
 ## 🕐 最後更新
 
-- 時間：2026-07-28 05:24
+- 時間：2026-07-28 06:10
 - 更新者：阿克（Claude Code, Opus 5）@ DESKTOP-LVSV9Q5
 - Git push：✅ 已推

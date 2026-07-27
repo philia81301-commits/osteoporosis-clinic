@@ -27,7 +27,9 @@
 ## 資料夾結構
 
 ```
-C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
+<工作副本路徑>\osteoporosis-clinic\   ← 每台電腦各自 clone；GitHub 才是 canonical
+   家用電腦：C:\projects\osteoporosis-clinic\（2026-07-28 從 OneDrive 搬出）
+   醫院電腦：自行 clone，路徑同樣放在 OneDrive 以外
 ├── agents.md                  本檔（專案藍圖）
 ├── handoff.md                 交接檔（開工必讀、收工必更新）
 ├── README.md                  repo 說明與更新流程
@@ -45,7 +47,7 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 | 層級 | 平台 | 位置 | 讀取時機 |
 |------|------|------|---------|
-| L1 | 本地（OneDrive＼文件） | `agents.md`＋`handoff.md` | 每個 session |
+| L1 | 本地（各電腦的 clone，**不放 OneDrive**） | `agents.md`＋`handoff.md` | 每個 session |
 | L2 | GitHub | [philia81301-commits/osteoporosis-clinic](https://github.com/philia81301-commits/osteoporosis-clinic)（**公開**，供 GitHub Pages） | 指定時 |
 | L3 | Obsidian | `osteoporosis/專案工作流程.md` | 有需要時 |
 
@@ -53,16 +55,17 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 ## 更新流程
 
-### 家用電腦（DESKTOP-LVSV9Q5，有 git）
+兩台電腦流程相同（都有 Claude Code 與 git）：
 
-1. 改本機 repo 的 HTML
-2. `git commit` + `git push` → GitHub Pages 約 1–2 分鐘自動重建
+1. **開工先 `git pull`**
+2. 改 HTML
+3. `git commit` + `git push` → GitHub Pages 約 1–2 分鐘自動重建
+4. **收工更新 `handoff.md` 並 push**
 
-**就這兩步。**（2026-07-28 起已停止維護 Drive 的 HTML 鏡像，見下方說明）
+**就這樣。**（2026-07-28 起已停止維護 Drive 的 HTML 鏡像，見下方說明）
 
-### 醫院電腦（**有 Claude Code 與 GitHub**，但**無法安裝 Google Drive 桌面版**）
-
-流程跟家裡一樣：改檔 → `git commit` → `git push`。唯一差別是**沒有 `G:\`**（已不依賴，因為 Drive 鏡像已停止維護）。
+- 家用電腦（DESKTOP-LVSV9Q5）：工作副本在 `C:\projects\osteoporosis-clinic\`
+- 醫院電腦：有 Claude Code 與 GitHub，但**無法安裝 Google Drive 桌面版**（沒有 `G:\`，已不依賴）
 
 首次設定——**clone 一份自己的工作副本，路徑要在 OneDrive 以外**（例如 `C:\projects\`）：
 
@@ -70,21 +73,18 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 git clone https://github.com/philia81301-commits/osteoporosis-clinic.git
 ```
 
-⚠️ 醫院那台也有 OneDrive 桌面版，但**不要用 OneDrive 同步這個 repo 給兩台共用**。
+⚠️ 兩台電腦都有 OneDrive 桌面版，但**不要用 OneDrive 同步這個 repo**。
 理由：OneDrive 同步 `.git` 會造成 `index.lock` 衝突與衝突複本（連 `.git` 內部檔案都可能被複製成
 「檔案 (DESKTOP-XXX)」版本，很難修），而且少了 pull／push 這道關卡，無法確認改動是否真的落地。
-**跨電腦一律靠 git，不靠 OneDrive。** 家用那份雖然位在 OneDrive 內（歷史原因），仍只由家用電腦操作。
+**跨電腦一律靠 git，不靠 OneDrive。** 家用那份原本在 `OneDrive\文件\osteoporosis\`，已於 2026-07-28
+搬到 `C:\projects\osteoporosis-clinic\`，兩台的狀況因此一致（都是 clone 來的、都在 OneDrive 外）。
 
-之後每次：
-
-1. **開工先 `git pull`**（拿到另一台的最新進度；`agents.md` 與 `handoff.md` 都在 repo 裡，所以交接資訊會一起同步過來）
-2. 改檔 → `git commit` → `git push`
-3. **收工更新 `handoff.md` 並 push**，回家才接得上
+`agents.md` 與 `handoff.md` 都在 repo 裡，所以交接資訊會跟著 git 一起同步。
 
 備援（連 git 都不方便時）：在 github.com 網頁上直接編輯檔案並 commit，Pages 同樣會自動重建；要用工具就直接開線上版網址。
 要看專案總覽 Doc 用 `drive.google.com` 網頁版。
 
-> 因此：`G:\` 相關的一切（`Copy-Item` 上傳、同名覆蓋沿用 file id）只適用於家用電腦。
+> 因此：`G:\` 相關的一切只適用於家用電腦，且本專案已不需要（Drive 鏡像已停止維護）。
 
 ### Drive 的角色（2026-07-28 起）
 
@@ -111,11 +111,12 @@ Drive 保留的東西只有**「專案總覽 — 骨質疏鬆風險評估、衛�
 ### 本專案特有守則（踩過坑換來的）
 
 - **這是公開 repo**。院內給付條文、任何病人資料都不可放進來；每次 push 前確認新增內容適合公開。
-- **跨電腦只用 git，不用 OneDrive 同步 repo**。兩台電腦各自持有工作副本（家用那份在 OneDrive 內是歷史原因，僅家用電腦操作；醫院那份 clone 在 OneDrive 以外）。讓 OneDrive 同步 `.git` 會產生 lock 衝突與衝突複本。
+- **跨電腦只用 git，不用 OneDrive 同步 repo**。兩台電腦各自 clone 工作副本，路徑都在 OneDrive 以外（家用：`C:\projects\osteoporosis-clinic\`）。讓 OneDrive 同步 `.git` 會產生 lock 衝突與衝突複本。**新專案一開始就建在 `C:\projects\`，不要放 OneDrive。**
 - **臨床工具的表單必須在載入時強制清空**（`autocomplete="off"` + `load` 後再 reset），否則瀏覽器會復原上一位病人的勾選。
 - **藥名一律同時標學名與常見商品名**（Evenity、Prolia、Forteo、Aclasta、Fosamax、Evista），只寫學名門診找不到藥。
 - **健保給付條文不寫死**（門檻、療程年限、換藥規定會修訂），只註明「請核對當期公告」。
 - **不要用分享 Drive 連結的方式給人用工具**：Drive 預覽器不執行 JavaScript，對方只會看到程式碼。要分享就給 GitHub Pages 網址。
 - **四個頁面的頁尾有署名、版本號與授權**（製作：潘湘如醫師｜家醫科；CC BY-NC-ND 4.0；GitHub Issues 當回報管道）。改動內容時**版本號與日期要一起更新**，那是使用者判斷手上是不是最新版的唯一依據；署名與授權不要拿掉。
 - **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名、不掛醫院名，避免職務著作與機構形象的問題。
-- 大檔上傳 Drive 走 `G:\` 掛載 `Copy-Item`（同名覆蓋沿用同一 file id），不要用 Drive MCP 的 `create_file`（需貼完整內容）。**但 `G:\` 只有家用電腦有**——醫院電腦無法安裝 Google Drive 桌面版，那裡一律走瀏覽器（線上版網址 + github.com 網頁編輯 + Drive 網頁版）。
+- 若哪天真的需要丟大檔到 Drive：走 `G:\` 掛載 `Copy-Item`（同名覆蓋沿用同一 file id），不要用 Drive MCP 的 `create_file`（需貼完整內容）。**但 `G:\` 只有家用電腦有**——醫院電腦無法安裝 Google Drive 桌面版，那裡走 `drive.google.com` 網頁版。
+- **檔案分工**：程式碼與純文字專案走 git；Excel／PPT／Word／掃描檔、分析產出、Obsidian vault 走 OneDrive。OneDrive 唯一不該做的事就是同步 `.git`。

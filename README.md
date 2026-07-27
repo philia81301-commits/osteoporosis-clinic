@@ -24,7 +24,8 @@
 1. 改本資料夾內的 HTML
 2. `git commit` 並 push 到 main → GitHub Pages 自動重建（約 1–2 分鐘）
 
-本 repo 是工具的唯一位置。沒有 git 的電腦（例如院內電腦）：直接在 GitHub 網頁上編輯檔案並 commit，Pages 同樣會自動重建；要用工具則直接開線上版網址即可。
+本 repo 是工具的唯一位置，每台電腦各自 `git clone` 工作副本（路徑放在雲端同步資料夾以外，避免同步軟體動到 `.git`）。
+沒有 git 的環境：直接在 GitHub 網頁上編輯檔案並 commit，Pages 同樣會自動重建；要用工具則直接開線上版網址即可。
 
 Google Drive 只保留「專案總覽」Google Doc 當專案基地；原本三個子資料夾內的 HTML 快照已於 2026-07-28 刪除，避免有人下載到過時版本。
 
