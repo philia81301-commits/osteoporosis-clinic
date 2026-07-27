@@ -37,17 +37,15 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 └── patient-education.html     病人衛教單張（給病人）
 ```
 
-**Google Drive 發布鏡像**（沿用中文檔名）：`我的雲端硬碟\osteoporosis\`
-- `01_風險評估\骨質疏鬆骨折風險評估工具.html`
-- `02_衛教素材\骨質疏鬆病人衛教單張.html`
-- `03_藥物選擇\骨質疏鬆藥物選擇工具.html`
-- `專案總覽 — 骨質疏鬆風險評估、衛教及藥物選擇`（Google Doc，專案基地，進度與待辦寫在那裡）
+**Google Drive**：`我的雲端硬碟\osteoporosis\`
+- `專案總覽 — 骨質疏鬆風險評估、衛教及藥物選擇`（Google Doc，**專案基地**，進度與待辦寫在那裡）
+- `01_風險評估`／`02_衛教素材`／`03_藥物選擇` 三個資料夾內的 HTML 為 2026-07-27 快照，**已停止維護**
 
 ## 同步層級（本專案初始化至第三層級）
 
 | 層級 | 平台 | 位置 | 讀取時機 |
 |------|------|------|---------|
-| L1 | 本地（OneDrive\文件） | `agents.md`＋`handoff.md` | 每個 session |
+| L1 | 本地（OneDrive＼文件） | `agents.md`＋`handoff.md` | 每個 session |
 | L2 | GitHub | [philia81301-commits/osteoporosis-clinic](https://github.com/philia81301-commits/osteoporosis-clinic)（**公開**，供 GitHub Pages） | 指定時 |
 | L3 | Obsidian | `osteoporosis/專案工作流程.md` | 有需要時 |
 
@@ -55,20 +53,30 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 ## 更新流程
 
-### 家用電腦（DESKTOP-LVSV9Q5，有 git、有 Google Drive 桌面版）
+### 家用電腦（DESKTOP-LVSV9Q5，有 git）
 
 1. 改本機 repo 的 HTML
 2. `git commit` + `git push` → GitHub Pages 約 1–2 分鐘自動重建
-3. 複製一份到 `G:\我的雲端硬碟\osteoporosis\` 對應子資料夾（Drive 端用中文檔名）
+
+**就這兩步。**（2026-07-28 起已停止維護 Drive 的 HTML 鏡像，見下方說明）
 
 ### 醫院電腦（**無法安裝 Google Drive 桌面版**，可能也沒有 git）
 
 - **只是要用工具** → 直接開線上版網址，不需安裝、登入或下載
 - **要改工具** → 在 github.com 的 repo 頁面直接編輯檔案並 commit，Pages 會自動重建（純瀏覽器，不需 git）
-- **要存取 Drive** → 用 `drive.google.com` 網頁版手動上傳／下載，**沒有 `G:\` 可用**
+- **要看專案總覽 Doc** → 用 `drive.google.com` 網頁版，**沒有 `G:\` 可用**
 - ⚠️ 醫院端做的改動記得回家後 `git pull`，避免本機 repo 落後
 
 > 因此：`G:\` 相關的一切（`Copy-Item` 上傳、同名覆蓋沿用 file id）只適用於家用電腦。
+
+### Drive 的角色（2026-07-28 起）
+
+**已停止維護 Drive 上的三個 HTML 鏡像。** 工具以 GitHub repo 為唯一位置、以 GitHub Pages 為唯一發布通道。
+理由：Drive 連結本來就開不動互動工具（預覽器不執行 JS），鏡像的唯一功能是離線備份，但 GitHub 已經是雲端備份；
+而且醫院電腦沒有 `G:\`，維持鏡像會讓同步流程在兩台電腦上不一致。
+
+Drive 保留的東西只有**「專案總覽 — 骨質疏鬆風險評估、衛教及藥物選擇」Google Doc**（專案基地，進度與待辦寫在那裡）。
+⚠️ `01_風險評估`／`02_衛教素材`／`03_藥物選擇` 三個資料夾內的 HTML 是 2026-07-27 的快照，**不再更新**，不要拿來當最新版。
 
 ## 工作約定
 

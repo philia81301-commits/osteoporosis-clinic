@@ -21,8 +21,7 @@
 
 1. 改本資料夾內的 HTML
 2. `git commit` 並 push 到 main → GitHub Pages 自動重建（約 1–2 分鐘）
-3. 同步一份到 Google Drive `我的雲端硬碟\osteoporosis\` 對應子資料夾（Drive 上沿用中文檔名）
 
-沒有 git 或無法安裝 Google Drive 桌面版的電腦（例如院內電腦）：直接在 GitHub 網頁上編輯檔案並 commit，Pages 同樣會自動重建；要用工具則直接開線上版網址即可。
+本 repo 是工具的唯一位置。沒有 git 的電腦（例如院內電腦）：直接在 GitHub 網頁上編輯檔案並 commit，Pages 同樣會自動重建；要用工具則直接開線上版網址即可。
 
-Drive 對應：`01_風險評估`／`02_衛教素材`／`03_藥物選擇`。
+Google Drive 上的 `01_風險評估`／`02_衛教素材`／`03_藥物選擇` 內的 HTML 是 2026-07-27 的快照，已停止維護；Drive 只保留「專案總覽」Google Doc 當專案基地。
