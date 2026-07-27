@@ -64,11 +64,16 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 流程跟家裡一樣：改檔 → `git commit` → `git push`。唯一差別是**沒有 `G:\`**（已不依賴，因為 Drive 鏡像已停止維護）。
 
-首次設定（醫院那台不會有 OneDrive 的檔案，所以要自己 clone 一份工作副本）：
+首次設定——**clone 一份自己的工作副本，路徑要在 OneDrive 以外**（例如 `C:\projects\`）：
 
 ```bash
 git clone https://github.com/philia81301-commits/osteoporosis-clinic.git
 ```
+
+⚠️ 醫院那台也有 OneDrive 桌面版，但**不要用 OneDrive 同步這個 repo 給兩台共用**。
+理由：OneDrive 同步 `.git` 會造成 `index.lock` 衝突與衝突複本（連 `.git` 內部檔案都可能被複製成
+「檔案 (DESKTOP-XXX)」版本，很難修），而且少了 pull／push 這道關卡，無法確認改動是否真的落地。
+**跨電腦一律靠 git，不靠 OneDrive。** 家用那份雖然位在 OneDrive 內（歷史原因），仍只由家用電腦操作。
 
 之後每次：
 
@@ -106,6 +111,7 @@ Drive 保留的東西只有**「專案總覽 — 骨質疏鬆風險評估、衛�
 ### 本專案特有守則（踩過坑換來的）
 
 - **這是公開 repo**。院內給付條文、任何病人資料都不可放進來；每次 push 前確認新增內容適合公開。
+- **跨電腦只用 git，不用 OneDrive 同步 repo**。兩台電腦各自持有工作副本（家用那份在 OneDrive 內是歷史原因，僅家用電腦操作；醫院那份 clone 在 OneDrive 以外）。讓 OneDrive 同步 `.git` 會產生 lock 衝突與衝突複本。
 - **臨床工具的表單必須在載入時強制清空**（`autocomplete="off"` + `load` 後再 reset），否則瀏覽器會復原上一位病人的勾選。
 - **藥名一律同時標學名與常見商品名**（Evenity、Prolia、Forteo、Aclasta、Fosamax、Evista），只寫學名門診找不到藥。
 - **健保給付條文不寫死**（門檻、療程年限、換藥規定會修訂），只註明「請核對當期公告」。
