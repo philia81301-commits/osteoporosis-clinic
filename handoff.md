@@ -24,7 +24,7 @@
 - **改動只要兩步**：改本機 repo → `git push`（Pages 自動重建）。2026-07-28 起**已停止維護 Drive 的 HTML 鏡像**，Drive 只保留「專案總覽」Google Doc；那三個資料夾裡的 HTML 是 07-27 快照，不要當最新版用。
 - **改內容時頁尾版本號與日期要一起更新**（目前 v1.0 / 2026-07-28），那是使用者判斷手上是不是最新版的唯一依據；署名與授權區塊不要拿掉。
 - **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名（潘湘如醫師｜家醫科）、不掛醫院名。
-- **醫院電腦無法安裝 Google Drive 桌面版**，那裡沒有 `G:\`：用工具就開線上版網址、要改就在 github.com 網頁編輯後 commit、要看專案總覽走 Drive 網頁版。醫院端改過的東西回家記得 `git pull`。
+- **醫院電腦有 Claude Code 與 GitHub**，流程跟家裡一樣（改檔 → commit → push）；只是**無法安裝 Google Drive 桌面版**（沒有 `G:\`，已不依賴）。醫院那台需要自己 `git clone` 一份工作副本，**開工先 `git pull`、收工更新 handoff.md 後 push**，兩台才接得上。
 - repo 位在 OneDrive 內，OneDrive 同步 `.git` 偶爾會鎖檔導致 git 指令失敗；已設 `windows.appendAtomically false`，真的卡住就把 repo 移出 OneDrive。
 - Google Doc 的內容無法用 Drive 連接器修改，要改專案總覽得用 claude-in-chrome 開瀏覽器（擴充功能偶爾沒連上，重試即可）。
 

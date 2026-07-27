@@ -60,12 +60,24 @@ C:\Users\phili\OneDrive\文件\osteoporosis\   ← 本機 repo（canonical）
 
 **就這兩步。**（2026-07-28 起已停止維護 Drive 的 HTML 鏡像，見下方說明）
 
-### 醫院電腦（**無法安裝 Google Drive 桌面版**，可能也沒有 git）
+### 醫院電腦（**有 Claude Code 與 GitHub**，但**無法安裝 Google Drive 桌面版**）
 
-- **只是要用工具** → 直接開線上版網址，不需安裝、登入或下載
-- **要改工具** → 在 github.com 的 repo 頁面直接編輯檔案並 commit，Pages 會自動重建（純瀏覽器，不需 git）
-- **要看專案總覽 Doc** → 用 `drive.google.com` 網頁版，**沒有 `G:\` 可用**
-- ⚠️ 醫院端做的改動記得回家後 `git pull`，避免本機 repo 落後
+流程跟家裡一樣：改檔 → `git commit` → `git push`。唯一差別是**沒有 `G:\`**（已不依賴，因為 Drive 鏡像已停止維護）。
+
+首次設定（醫院那台不會有 OneDrive 的檔案，所以要自己 clone 一份工作副本）：
+
+```bash
+git clone https://github.com/philia81301-commits/osteoporosis-clinic.git
+```
+
+之後每次：
+
+1. **開工先 `git pull`**（拿到另一台的最新進度；`agents.md` 與 `handoff.md` 都在 repo 裡，所以交接資訊會一起同步過來）
+2. 改檔 → `git commit` → `git push`
+3. **收工更新 `handoff.md` 並 push**，回家才接得上
+
+備援（連 git 都不方便時）：在 github.com 網頁上直接編輯檔案並 commit，Pages 同樣會自動重建；要用工具就直接開線上版網址。
+要看專案總覽 Doc 用 `drive.google.com` 網頁版。
 
 > 因此：`G:\` 相關的一切（`Copy-Item` 上傳、同名覆蓋沿用 file id）只適用於家用電腦。
 
