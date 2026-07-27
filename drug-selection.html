@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骨質疏鬆藥物選擇工具</title>
+<style>
+  :root{
+    --surface:#FFFFFF;
+    --text:#0F172A; --text2:#334155; --muted:#64748B;
+    --sky:#0EA5E9; --sky-d:#0369A1; --sky-l:#E0F2FE;
+    --emerald:#22C55E; --emerald-d:#15803D;
+    --amber:#F59E0B; --amber-d:#B45309;
+    --rose:#E11D48; --rose-d:#9F1239;
+    --border:rgba(14,165,233,.16); --shadow:0 10px 30px rgba(15,23,42,.08);
+    --font: "Microsoft JhengHei","PingFang TC","Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:linear-gradient(180deg,#F8FDFF 0%,#EEF9FF 100%);color:var(--text);font-family:var(--font);min-height:100vh}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(1rem,3vw,2.5rem)}
+  header.top{text-align:center;margin-bottom:1.4rem}
+  header.top .icon{font-size:56px;line-height:1;margin-bottom:.4rem}
+  header.top h1{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:900;color:var(--sky-d);letter-spacing:-.5px}
+  header.top p{color:var(--text2);font-weight:600;margin-top:.4rem;font-size:clamp(.85rem,1.4vw,1rem)}
+
+  /* tabs */
+  nav.tabs{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin-bottom:1.4rem}
+  .tab{font-family:inherit;font-size:.95rem;font-weight:800;cursor:pointer;border:1px solid var(--border);
+       background:var(--surface);color:var(--sky-d);padding:.6rem 1.1rem;border-radius:999px;box-shadow:var(--shadow);transition:.18s}
+  .tab:hover{background:var(--sky-l)}
+  .tab.active{background:var(--sky);color:#fff;border-color:var(--sky)}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:1.1rem;box-shadow:var(--shadow);padding:1.4rem 1.5rem;margin-bottom:1.2rem}
+  .card h2{font-size:1.15rem;font-weight:800;color:var(--sky-d);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .card h3{font-size:1rem;font-weight:900;color:var(--text);margin:1.2rem 0 .6rem}
+
+  .fg{margin-bottom:1.1rem}
+  .fg > label.q{display:block;font-weight:700;color:var(--text);margin-bottom:.5rem;font-size:.95rem}
+  .fg .hint{font-weight:500;color:var(--muted);font-size:.8rem}
+  .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+  .opts label{display:inline-flex;align-items:center;gap:.4rem;background:#F7FBFE;border:1px solid #E2EEF6;border-radius:.6rem;
+              padding:.5rem .8rem;font-size:.88rem;cursor:pointer;transition:.15s;color:var(--text2)}
+  .opts label:hover{background:#EAF6FD;border-color:#BAE6FD}
+  .opts input{accent-color:var(--sky);width:16px;height:16px}
+  .opts input:checked + span{font-weight:700;color:var(--sky-d)}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  @media(max-width:560px){.checks{grid-template-columns:1fr}}
+  .checks label{display:flex;align-items:flex-start;gap:.5rem;background:#F7FBFE;border:1px solid #E2EEF6;border-radius:.6rem;
+                padding:.55rem .7rem;font-size:.85rem;cursor:pointer;color:var(--text2);line-height:1.35}
+  .checks input{accent-color:var(--sky);width:16px;height:16px;margin-top:2px;flex-shrink:0}
+  .btns{display:flex;gap:.7rem;margin-top:.4rem}
+  .btn{border:none;border-radius:.6rem;padding:.6rem 1.1rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .btn-ghost{background:#EAF0F5;color:#475569}.btn-ghost:hover{background:#dde6ee}
+  .btn-print{background:var(--sky);color:#fff}.btn-print:hover{background:#0284c7}
+
+  /* result */
+  .placeholder{color:var(--muted);text-align:center;padding:2.5rem 1rem;font-size:.95rem;line-height:1.7}
+  .rank{font-size:.78rem;letter-spacing:2px;font-weight:800;text-transform:uppercase;color:var(--muted);margin:1.1rem 0 .6rem}
+  .drug{border-radius:.9rem;padding:.9rem 1.05rem;margin-bottom:.7rem;border:1px solid #E2F1FA;background:#F9FCFF}
+  .drug.first{border-color:#BBF7D0;background:#F0FDF4}
+  .drug.alt{border-color:#BAE6FD;background:#F0F9FF}
+  .drug.avoid{border-color:#FECACA;background:#FEF2F2}
+  .drug .name{font-size:1.05rem;font-weight:900;color:var(--text);display:flex;flex-wrap:wrap;align-items:baseline;gap:.45rem}
+  .drug .name .cls{font-size:.75rem;font-weight:800;color:#fff;background:var(--sky);border-radius:999px;padding:.15rem .55rem}
+  .drug .name i{font-style:normal;font-size:.85rem;font-weight:700;color:var(--muted)}
+  td i{font-style:normal;font-size:.82rem;font-weight:700;color:var(--muted)}
+  .edu h3 i{font-style:normal;font-size:.9rem;font-weight:700;color:var(--muted)}
+  .drug.first .name .cls{background:var(--emerald-d)}
+  .drug.avoid .name .cls{background:var(--rose)}
+  .drug .dose{font-size:.85rem;color:var(--sky-d);font-weight:700;margin-top:.3rem}
+  .drug ul{list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.35rem}
+  .drug li{font-size:.87rem;color:var(--text2);line-height:1.55;display:flex;gap:.5rem}
+  .drug li::before{content:"▍";color:var(--sky);flex-shrink:0}
+  .drug.avoid li::before{color:var(--rose)}
+  .drug.first li::before{color:var(--emerald-d)}
+  .drug li b{color:var(--text);font-weight:900}
+
+  .flag{border-radius:.8rem;padding:.85rem 1rem;margin-bottom:.85rem;font-size:.86rem;line-height:1.55}
+  .flag.warn{background:#FEF2F2;border:1px solid #FECACA;color:#7f1d1d}
+  .flag.info{background:#FEFCE8;border:1px solid #FDE68A;color:#713f12}
+  .flag.tip{background:#F0FDF4;border:1px solid #BBF7D0;color:#14532d}
+  .flag.sky{background:#F0F9FF;border:1px solid #BAE6FD;color:#0c4a6e}
+  .flag b{display:block;margin-bottom:.25rem;font-size:.9rem}
+
+  /* table */
+  .tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;min-width:860px;font-size:.86rem}
+  th,td{border:1px solid #E2EEF6;padding:.6rem .7rem;text-align:left;vertical-align:top;line-height:1.55;color:var(--text2)}
+  th{background:var(--sky-l);color:var(--sky-d);font-weight:800;white-space:nowrap}
+  tbody tr:nth-child(even){background:#F9FCFF}
+  td b{color:var(--text)}
+  .tag{display:inline-block;font-size:.74rem;font-weight:800;border-radius:999px;padding:.1rem .5rem;white-space:nowrap}
+  .tag.anti{background:#E0F2FE;color:#0369A1}
+  .tag.ana{background:#DCFCE7;color:#15803D}
+  .tag.dual{background:#FEF3C7;color:#B45309}
+
+  /* patient education */
+  .edu{border:1px solid var(--border);border-radius:1rem;padding:1.1rem 1.2rem;margin-bottom:1rem;background:#F9FCFF}
+  .edu h3{font-size:1.1rem;color:var(--sky-d);font-weight:900;margin:0 0 .5rem}
+  .edu p{font-size:1rem;color:var(--text2);line-height:1.8;margin-bottom:.6rem}
+  .edu .say{background:#fff;border-left:5px solid var(--sky);border-radius:.6rem;padding:.7rem .9rem;font-size:1rem;color:var(--text);line-height:1.8}
+  .edu ul{padding-left:1.3rem;margin:.5rem 0;color:var(--text2)}
+  .edu li{font-size:.95rem;line-height:1.75;margin-bottom:.35rem}
+
+  .step{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:.9rem}
+  .step .n{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:var(--sky);color:#fff;font-weight:900;
+           display:flex;align-items:center;justify-content:center;font-size:.9rem}
+  .step .c{font-size:.92rem;color:var(--text2);line-height:1.65}
+  .step .c b{color:var(--text)}
+
+  .disclaimer{margin-top:1.6rem;font-size:.78rem;color:var(--muted);line-height:1.6;text-align:center;padding:0 1rem}
+  @media print{
+    body{background:#fff}
+    nav.tabs,.btns{display:none}
+    .panel{display:block !important;page-break-before:always}
+    .card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="icon">&#128138;</div>
+    <h1>骨質疏鬆藥物選擇工具</h1>
+    <p>依風險分層、腎功能、共病與用藥史 → 選藥順位 · 禁忌 · 療程與停藥銜接</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-p="p1">① 選藥決策</button>
+    <button class="tab" data-p="p2">② 藥物比較表</button>
+    <button class="tab" data-p="p3">③ 病人用藥衛教</button>
+    <button class="tab" data-p="p4">④ 停藥與銜接</button>
+  </nav>
+
+  <!-- ================= PANEL 1：選藥決策 ================= -->
+  <section class="panel active" id="p1">
+  <div class="grid">
+    <!-- INPUT -->
+    <div>
+      <div class="card">
+        <h2>病人條件</h2>
+
+        <div class="fg">
+          <label class="q">風險分層　<span class="hint">（沿用「骨折風險評估工具」的結果）</span></label>
+          <div class="opts">
+            <label><input type="radio" name="risk" value="high" checked><span>高風險</span></label>
+            <label><input type="radio" name="risk" value="vhigh"><span>極高風險</span></label>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="q">性別 / 停經狀態</label>
+          <div class="opts">
+            <label><input type="radio" name="who" value="postF" checked><span>停經後女性</span></label>
+            <label><input type="radio" name="who" value="preF"><span>停經前女性</span></label>
+            <label><input type="radio" name="who" value="M"><span>男性</span></label>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="q">年齡　<span class="hint">（歲，影響 SERM / 荷爾蒙的取捨）</span></label>
+          <div class="opts"><input type="number" id="age" min="0" max="120" placeholder="例 68"
+            style="width:120px;padding:.5rem .7rem;border:1px solid #CCD7E4;border-radius:.55rem;font-size:.95rem;font-family:inherit"></div>
+        </div>
+
+        <div class="fg">
+          <label class="q">腎功能　<span class="hint">（eGFR，mL/min/1.73m²）</span></label>
+          <div class="opts">
+            <label><input type="radio" name="egfr" value="ge60" checked><span>≥ 60</span></label>
+            <label><input type="radio" name="egfr" value="mid"><span>35–59</span></label>
+            <label><input type="radio" name="egfr" value="lt35"><span>&lt; 35</span></label>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="q">過去骨鬆用藥史　<span class="hint">（可複選；未曾治療請勾第一項）</span></label>
+          <div class="opts" id="priorGroup">
+            <label><input type="checkbox" class="px" value="none" checked><span>未曾治療</span></label>
+            <label><input type="checkbox" class="px" value="bp"><span>用過 bisphosphonate</span></label>
+            <label><input type="checkbox" class="px" value="dmab"><span>正在用 denosumab</span></label>
+            <label><input type="checkbox" class="px" value="serm"><span>用過 SERM / 荷爾蒙</span></label>
+            <label><input type="checkbox" class="px" value="anaDone"><span>骨生成藥療程剛結束</span></label>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="q">臨床限制條件　<span class="hint">（可複選）</span></label>
+          <div class="checks">
+            <label><input type="checkbox" class="cx" value="gi"><span>上消化道疾病 / 無法維持坐姿 30 分鐘</span></label>
+            <label><input type="checkbox" class="cx" value="dental"><span>口腔狀況差或計畫侵入性牙科處置</span></label>
+            <label><input type="checkbox" class="cx" value="cvd"><span>近 1 年心肌梗塞或中風</span></label>
+            <label><input type="checkbox" class="cx" value="vte"><span>靜脈血栓病史 / 高血栓風險</span></label>
+            <label><input type="checkbox" class="cx" value="hypocal"><span>低血鈣或維生素 D 缺乏未矯正</span></label>
+            <label><input type="checkbox" class="cx" value="menosx"><span>停經症狀明顯（熱潮紅等）</span></label>
+            <label><input type="checkbox" class="cx" value="breastHx"><span>乳癌病史</span></label>
+            <label><input type="checkbox" class="cx" value="noDailyInj"><span>無法每天自我注射</span></label>
+            <label><input type="checkbox" class="cx" value="malignancy"><span>骨骼惡性病灶 / 曾骨骼放射治療</span></label>
+            <label><input type="checkbox" class="cx" value="steroid"><span>長期糖皮質類固醇使用中</span></label>
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="btn btn-ghost" onclick="resetForm()">重置</button>
+          <button class="btn btn-print" onclick="window.print()">列印</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div>
+      <div class="card">
+        <h2>選藥順位與提示</h2>
+        <div id="result"><div class="placeholder">請在左側設定病人條件，建議會即時更新。</div></div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- ================= PANEL 2：藥物比較表 ================= -->
+  <section class="panel" id="p2">
+    <div class="card">
+      <h2>各類骨鬆藥物比較</h2>
+      <div class="tblwrap">
+      <table>
+        <thead>
+          <tr>
+            <th>藥物</th><th>機轉分類</th><th>給藥方式</th><th>骨折預防重點</th><th>主要禁忌 / 注意</th><th>療程與停藥</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>Alendronate</b> <i>Fosamax</i><br>Risedronate <i>Actonel</i></td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>口服，每週一次（risedronate 亦有每月劑型）。晨起空腹、配 200 mL 白開水、服後保持直立 30 分鐘</td>
+            <td>脊椎、非脊椎、髖部骨折均有降低證據；價格與取得性最佳，多數初治高風險病人的第一線</td>
+            <td>eGFR &lt; 35 不建議；食道狹窄或無法維持直立者避免；口腔評估後再起始（顎骨壞死）</td>
+            <td>一般 5 年後重新評估；低風險者可談藥物假期，高風險者延長</td>
+          </tr>
+          <tr>
+            <td><b>Zoledronic acid</b> <i>Aclasta</i></td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>靜脈注射 5 mg，每年一次</td>
+            <td>脊椎、非脊椎、髖部骨折均有降低證據；依從性最佳，避開腸胃道問題</td>
+            <td>eGFR &lt; 35 不建議；輸注前補足水分、先矯正低血鈣與維生素 D；急性期反應（發燒、肌痛）約 1–3 天</td>
+            <td>常 3 年後重新評估；高風險者可延長</td>
+          </tr>
+          <tr>
+            <td><b>Denosumab</b> <i>Prolia</i></td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>皮下注射 60 mg，每 6 個月一次</td>
+            <td>脊椎、非脊椎、髖部骨折均有降低證據；腎功能不佳者常見的可行選項</td>
+            <td>低血鈣為禁忌，起始前必須矯正鈣與維生素 D；eGFR 低者低血鈣風險明顯上升，需追蹤血鈣；顎骨壞死風險需口腔照護</td>
+            <td><b>不可自行停藥或延遲注射</b>；停用必接 bisphosphonate，否則有反彈性多發椎體骨折風險</td>
+          </tr>
+          <tr>
+            <td><b>Teriparatide</b> <i>Forteo</i><br>（PTH 類似物）</td>
+            <td><span class="tag ana">骨生成</span></td>
+            <td>皮下注射，每日一次</td>
+            <td>脊椎與非脊椎骨折降低證據明確；適合多發椎體骨折、極低 BMD、抗骨吸收藥治療中仍再骨折者</td>
+            <td>骨骼惡性病灶、曾接受骨骼放射治療、原因不明 ALP 升高、高血鈣者避免；需病人能每日自我注射</td>
+            <td>累積療程有上限（常見為 24 個月，依現行指引與給付規定）；<b>結束後必須接抗骨吸收藥</b></td>
+          </tr>
+          <tr>
+            <td><b>Romosozumab</b> <i>Evenity</i></td>
+            <td><span class="tag dual">促骨生成＋抑制骨吸收</span></td>
+            <td>皮下注射 210 mg，每月一次，共 12 個月</td>
+            <td>BMD 上升幅度大、脊椎骨折降低快，適合極高風險停經後女性</td>
+            <td><b>近 1 年心肌梗塞或中風者避免</b>；心血管風險需個別衡量；男性資料相對少</td>
+            <td>固定 12 個月；<b>結束後必須接抗骨吸收藥</b></td>
+          </tr>
+          <tr>
+            <td><b>Raloxifene</b> <i>Evista</i><br>（SERM）</td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>口服 60 mg，每日一次</td>
+            <td>主要降低<b>脊椎</b>骨折；髖部骨折證據不足。附帶降低侵襲性乳癌風險</td>
+            <td>靜脈血栓病史為禁忌；可能加重熱潮紅；高齡與中風高風險者非優先；<b>乳癌病史者不以此作為骨鬆用藥</b></td>
+            <td>可長期使用；停藥後保護效果消退</td>
+          </tr>
+          <tr>
+            <td><b>荷爾蒙治療</b>（HT）</td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>口服或經皮，依配方</td>
+            <td>可預防骨質流失並降低骨折；適合年齡 &lt; 60 歲或停經 10 年內、同時有停經症狀者</td>
+            <td>乳癌病史、血栓、冠心病、原因不明陰道出血者避免；不作為單純骨鬆的首選</td>
+            <td>以最低有效劑量、定期重新評估；停藥後骨密度會下降</td>
+          </tr>
+          <tr>
+            <td><b>Calcitonin</b></td>
+            <td><span class="tag anti">抗骨吸收</span></td>
+            <td>鼻噴或注射</td>
+            <td>抗骨折效果弱，現多僅用於急性椎體骨折疼痛的短期輔助</td>
+            <td>長期使用有惡性腫瘤風險疑慮，不建議長期</td>
+            <td>短期，不作長期骨鬆治療</td>
+          </tr>
+          <tr>
+            <td><b>鈣 + 維生素 D</b></td>
+            <td><span class="tag anti">基礎補充</span></td>
+            <td>飲食優先，不足才補充劑</td>
+            <td>所有藥物治療的共同基礎，單獨使用不足以治療骨鬆</td>
+            <td>高血鈣、腎結石病史者留意劑量</td>
+            <td>持續；元素鈣約 1000–1200 mg/日、維生素 D 約 800–1000 IU/日</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="flag sky" style="margin-top:1rem">
+        <b>使用提醒</b>
+        灰字為常見商品名，僅供門診辨識用，同一學名可能有多種廠牌與劑型（例如 teriparatide 已有生物相似藥）。<br>
+        本表為門診教學與決策輔助用的整理，劑量與療程請以最新藥品說明書、最新版指引與健保給付規定核對。給付條件（如 T-score 門檻、骨折部位、療程年限與換藥規定）會不時修訂，處方前請查核當期公告。
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 3：病人用藥衛教 ================= -->
+  <section class="panel" id="p3">
+    <div class="card">
+      <h2>用藥衛教口語稿</h2>
+      <p style="font-size:.92rem;color:var(--muted);line-height:1.7;margin-bottom:1rem">
+        灰底方塊是可以直接對病人講的說法；下面列的是一定要交代的重點與回診時機。
+      </p>
+
+      <div class="edu">
+        <h3>口服 bisphosphonate（每週一次）<i>Fosamax / Actonel</i></h3>
+        <div class="say">「這個藥一週吃一次，固定挑一天早上剛起床、還沒吃早餐的時候吃。用一大杯白開水配著吞，吃完之後半小時內不要躺下、不要吃東西喝飲料，坐著或站著、走動都可以。」</div>
+        <ul>
+          <li>不能用牛奶、果汁、咖啡配藥，會影響吸收。</li>
+          <li>忘記吃：想起來時若隔天還來得及，就在隔天早上補一次，然後回到原本的固定日；不要一天吃兩次。</li>
+          <li>要回診說的狀況：吞嚥疼痛、胸口灼熱明顯、大腿或鼠蹲部持續痠痛。</li>
+          <li>要做拔牙、植牙、牙科手術前，先告知牙醫正在吃這個藥。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>Zoledronic acid（一年一次點滴）<i>Aclasta</i></h3>
+        <div class="say">「這是一年打一次的點滴，打完藥效可以維持一整年，不用每天記得吃藥。打之前這幾天請多喝水。」</div>
+        <ul>
+          <li>約三分之一的人打完 1–3 天會有發燒、肌肉痠痛、像感冒的感覺，多喝水、必要時用普拿疼會改善，之後幾次通常越來越輕。</li>
+          <li>打針前會先抽血看腎功能和血鈣，鈣或維生素 D 太低要先補起來。</li>
+          <li>牙科侵入性處置建議在打針前先完成。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>Denosumab（每半年一針）<i>Prolia</i></h3>
+        <div class="say">「這是半年打一次的皮下注射，時間到一定要回來打。這個藥最重要的一件事是<b>不能自己停掉</b>——如果停了又沒有接別的藥，骨頭反而可能在短時間內連續斷幾節脊椎。要停藥一定要先跟我討論接下來換什麼藥。」</div>
+        <ul>
+          <li>下一次注射日期請當場記在手機或藥物卡上，延誤太久會影響保護效果。</li>
+          <li>每天的鈣和維生素 D 要吃夠，這個藥有低血鈣的風險；出現手腳麻、抽筋要回診。</li>
+          <li>牙科侵入性處置前要告知，並維持口腔清潔與定期牙科檢查。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>Teriparatide（每天自己打一針）<i>Forteo</i></h3>
+        <div class="say">「這一種是『幫你把骨頭長回來』的藥，跟前面那些『減少骨頭流失』的方向不一樣，所以效果比較快，但要每天自己在肚子或大腿打一針。筆型針很細，我們會教到你會為止。」</div>
+        <ul>
+          <li>筆針要冷藏保存，外出時注意保冷；每天固定時間打比較不會忘。</li>
+          <li>剛開始幾次可能有頭暈、噁心、腳抽筋，起身慢一點通常會改善。</li>
+          <li>療程有時間上限，<b>打完之後一定要接續另一種保骨藥</b>，不然長回來的骨質會流失掉。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>Romosozumab（每月一次，共一年）<i>Evenity</i></h3>
+        <div class="say">「這個藥一個月打一次（一次打兩針），打滿一年就結束。它比較特別，同時可以促進骨頭生成、又減少骨質流失，所以骨密度上升得比較快。打滿一年後同樣要接續保骨藥，不然長回來的骨質會流失掉。」</div>
+        <ul>
+          <li>如果最近一年內有心肌梗塞或中風，這個藥不適合。</li>
+          <li>療程中若出現胸痛、單側肢體無力、說話不清，立刻就醫。</li>
+          <li>同樣需要每天足量的鈣與維生素 D。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>Raloxifene（每天口服）<i>Evista</i></h3>
+        <div class="say">「這個藥主要保護的是脊椎，對髖部的證據比較不足，所以通常用在比較年輕、以脊椎風險為主的病人。」</div>
+        <ul>
+          <li>有血栓病史不能用；久坐長途飛行、術後臥床期間要提醒醫師。</li>
+          <li>可能加重熱潮紅；小腿腫痛、突發胸悶要立刻就醫。</li>
+        </ul>
+      </div>
+
+      <div class="edu">
+        <h3>所有病人共同交代</h3>
+        <ul>
+          <li><b>鈣與維生素 D 是地基</b>：飲食優先，不夠再補充；沒有地基，任何骨鬆藥效果都會打折。</li>
+          <li><b>負重與肌力運動</b>：每週規律進行，並加入平衡訓練降低跌倒風險。</li>
+          <li><b>防跌</b>：居家照明、浴室防滑、清除地面雜物、檢視會頭暈的用藥、每年檢查視力。</li>
+          <li><b>不要自行停藥</b>：骨鬆治療沒有立即感覺，但停藥風險是真實的；有任何副作用先回診討論。</li>
+          <li><b>牙科</b>：治療期間維持口腔衛生，任何侵入性牙科處置前先告知正在使用骨鬆藥物。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 4：停藥與銜接 ================= -->
+  <section class="panel" id="p4">
+    <div class="card">
+      <h2>療程規劃與換藥銜接</h2>
+
+      <h3>核心原則</h3>
+      <div class="flag tip">
+        <b>骨鬆治療是「有計畫的長期治療」</b>
+        起始一種藥的同時，就要想好：療程多長、怎麼評估反應、結束後接什麼。特別是 denosumab 與骨生成藥，<b>沒有接續計畫就不要起始</b>。
+      </div>
+
+      <h3>Bisphosphonate 藥物假期</h3>
+      <div class="step"><div class="n">1</div><div class="c">口服 bisphosphonate 約 <b>5 年</b>、zoledronic acid 約 <b>3 年</b>後全面重新評估：骨折史、DXA 變化、目前危險因子。</div></div>
+      <div class="step"><div class="n">2</div><div class="c">風險已降低者可進入<b>藥物假期</b>，期間仍持續鈣、維生素 D、運動與防跌，並定期追蹤 DXA。</div></div>
+      <div class="step"><div class="n">3</div><div class="c">仍屬高風險（如髖部 T-score 仍很低、療程中曾骨折、持續使用類固醇）者，<b>延長治療或換藥</b>，不進入假期。</div></div>
+      <div class="step"><div class="n">4</div><div class="c">假期期間若發生新骨折或 BMD 明顯下降，即<b>重新起始治療</b>。</div></div>
+
+      <h3>Denosumab：不能有空窗</h3>
+      <div class="flag warn">
+        <b>⚠ 停用 denosumab 前必須先安排銜接</b>
+        停藥或延遲注射會造成骨轉換反彈，可能在數個月內發生多發性椎體骨折。若要停用，於<b>末次注射後約 6 個月</b>接上 bisphosphonate（口服或 zoledronic acid），並在之後追蹤 BMD 與骨轉換指標。長期使用者的銜接需更謹慎，必要時諮詢專科。
+      </div>
+
+      <h3>骨生成藥結束後</h3>
+      <div class="step"><div class="n">1</div><div class="c">Teriparatide 或 romosozumab 療程結束後，<b>立即接續抗骨吸收藥</b>（bisphosphonate 或 denosumab），中間不要空窗；否則新增的骨質會快速流失。</div></div>
+      <div class="step"><div class="n">2</div><div class="c">順序很重要：<b>先骨生成、後抗骨吸收</b>的效果優於反向；已長期使用抗骨吸收藥者再換骨生成藥，初期 BMD 反應可能被鈍化，但對再骨折的高風險病人仍值得換。</div></div>
+
+      <h3>治療反應追蹤</h3>
+      <div class="step"><div class="n">1</div><div class="c"><b>DXA</b>：治療後 1–2 年追蹤，盡量同一台機器、同一部位比較。</div></div>
+      <div class="step"><div class="n">2</div><div class="c"><b>骨轉換指標（P1NP / CTX）</b>：起始後 3–6 個月可測，用來看藥物反應與依從性。</div></div>
+      <div class="step"><div class="n">3</div><div class="c"><b>治療失敗的定義概念</b>：足量治療與良好依從性下仍發生新骨折、或 BMD 持續明顯下降 → 重新評估次發性因素、依從性，並考慮升階為骨生成藥。</div></div>
+
+      <h3>起始任何藥物前的固定檢查</h3>
+      <div class="flag sky">
+        血鈣、25(OH)D、腎功能（eGFR）、鹼性磷酸酶；口腔狀況與牙科計畫；低血鈣與維生素 D 缺乏先矯正；確認沒有次發性骨鬆的未處理原因。
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer">
+    本工具為門診決策輔助與教學用途，選藥邏輯依實證概念與常用臨床流程設計，並非硬性診斷或處方標準。<br>
+    實際處方請結合完整臨床判斷、最新指引、藥品說明書與當期健保給付規定。
+  </p>
+</div>
+
+<script>
+/* ---------- tabs ---------- */
+document.querySelectorAll('.tab').forEach(function(t){
+  t.addEventListener('click', function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active');});
+    document.querySelectorAll('.panel').forEach(function(x){x.classList.remove('active');});
+    t.classList.add('active');
+    document.getElementById(t.dataset.p).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ---------- helpers ---------- */
+var val = function(name){
+  var el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : null;
+};
+var checked = function(sel){
+  var out = {};
+  document.querySelectorAll(sel).forEach(function(c){ out[c.value]=true; });
+  return out;
+};
+
+/* 用藥史可複選，但「未曾治療」與其他項互斥 */
+document.querySelectorAll('.px').forEach(function(box){
+  box.addEventListener('change', function(){
+    if (box.value==='none'){
+      if (box.checked) document.querySelectorAll('.px').forEach(function(o){ if(o!==box) o.checked=false; });
+    } else if (box.checked){
+      document.querySelector('.px[value=none]').checked=false;
+    }
+    if (!document.querySelectorAll('.px:checked').length) document.querySelector('.px[value=none]').checked=true;
+  });
+});
+
+/* ---------- 藥物資料 ---------- */
+var DRUGS = {
+  oralBP:{name:'口服 Bisphosphonate <i>Fosamax / Actonel</i>',cls:'抗骨吸收',dose:'Alendronate 70 mg 每週一次（或 risedronate 每週/每月劑型）；晨起空腹、白開水、服後直立 30 分鐘'},
+  zol:{name:'Zoledronic acid <i>Aclasta</i>',cls:'抗骨吸收',dose:'5 mg 靜脈注射，每年一次；輸注前補足水分'},
+  dmab:{name:'Denosumab <i>Prolia</i>',cls:'抗骨吸收',dose:'60 mg 皮下注射，每 6 個月一次'},
+  tpd:{name:'Teriparatide <i>Forteo</i>',cls:'骨生成',dose:'皮下注射每日一次；累積療程有上限，結束後須接抗骨吸收藥'},
+  romo:{name:'Romosozumab <i>Evenity</i>',cls:'促骨生成＋抑制骨吸收',dose:'210 mg 皮下注射（兩針），每月一次，共 12 個月；結束後須接抗骨吸收藥'},
+  ral:{name:'Raloxifene（SERM）<i>Evista</i>',cls:'抗骨吸收',dose:'60 mg 口服，每日一次'},
+  ht:{name:'荷爾蒙治療（HT）',cls:'抗骨吸收',dose:'依配方口服或經皮，最低有效劑量'}
+};
+
+function pick(){
+  var risk = val('risk');            // high / vhigh
+  var who  = val('who');             // postF / preF / M
+  var egfr = val('egfr');            // ge60 / mid / lt35
+  var p    = checked('.px:checked'); // 可複選：none / bp / dmab / serm / anaDone
+  var age  = parseFloat(document.getElementById('age').value);
+  if (isNaN(age)) age = null;
+  var c = checked('.cx:checked');
+
+  var first=[], alt=[], avoid=[], flags=[];
+
+  /* 加入候選的小工具：key、清單、理由陣列 */
+  function add(list,key,notes){ list.push({key:key,notes:notes}); }
+
+  /* ---------- 硬性排除 ---------- */
+  var bpBlocked = (egfr==='lt35');
+  if (bpBlocked){
+    add(avoid,'oralBP',['eGFR &lt; 35，bisphosphonate 不建議使用。']);
+    add(avoid,'zol',['eGFR &lt; 35，zoledronic acid 不建議使用。']);
+  }
+  if (!bpBlocked && c.gi){
+    add(avoid,'oralBP',['上消化道疾病或無法維持坐姿 30 分鐘，口服 bisphosphonate 不適合；若要用 bisphosphonate 請改 <b>zoledronic acid 靜脈注射</b>。']);
+  }
+  if (c.cvd){
+    add(avoid,'romo',['近 1 年心肌梗塞或中風，<b>不使用 romosozumab</b>。']);
+  }
+  if (c.malignancy){
+    add(avoid,'tpd',['骨骼惡性病灶或曾接受骨骼放射治療，<b>不使用 teriparatide</b>。']);
+  }
+  if (who==='postF' && c.vte){
+    add(avoid,'ral',['靜脈血栓病史 / 高血栓風險，<b>raloxifene 禁用</b>。']);
+    add(avoid,'ht',['血栓風險，荷爾蒙治療不適合。']);
+  }
+  if (who!=='postF'){
+    add(avoid,'ral',['raloxifene 與荷爾蒙治療的骨鬆適應症限於停經後女性。']);
+  }
+  if (c.breastHx){
+    add(avoid,'ht',['<b>乳癌病史，荷爾蒙治療禁用。</b>']);
+    if (who==='postF') add(avoid,'ral',['乳癌病史者不以 raloxifene 作為骨鬆用藥（其定位是高風險族群的乳癌風險降低與脊椎保護，且病人多已在使用 tamoxifen 或芳香環酶抑制劑）；此族群優先 bisphosphonate 或 denosumab。']);
+  }
+
+  var avoidKeys = {};
+  avoid.forEach(function(a){ avoidKeys[a.key]=true; });
+  var ok = function(k){ return !avoidKeys[k]; };
+
+  /* ---------- 用藥史主導的情境 ---------- */
+  if (p.dmab){
+    flags.push({t:'warn',b:'⚠ 目前使用 denosumab — 先處理「能不能停」',
+      c:'不要單純停藥或延遲注射。若因換藥、給付或副作用需停用，於<b>末次注射後約 6 個月</b>接上 bisphosphonate（'+(bpBlocked?'但此病人 eGFR &lt; 35，bisphosphonate 不適用，銜接方案需個別化並建議專科討論':'口服或 zoledronic acid')+'），不可留空窗。'});
+  }
+  if (p.anaDone && !p.dmab){
+    flags.push({t:'warn',b:'⚠ 骨生成藥療程剛結束 — 必須立即銜接抗骨吸收藥',
+      c:'此時的首要任務不是再選新的骨生成藥，而是<b>馬上接上抗骨吸收藥</b>維持已增加的骨質，中間不要空窗。'});
+  }
+  if (p.serm){
+    flags.push({t:'info',b:'曾使用 SERM / 荷爾蒙治療',
+      c:'這兩類藥停用後保護效果會消退，骨密度可能已回落。換藥時請以目前的 DXA 與骨折史重新分層，不要以過去治療過就視為已受保護。'});
+  }
+
+  /* ---------- 主要選藥邏輯 ---------- */
+  var anabolicFirst = (risk==='vhigh' && !p.anaDone && !p.dmab);
+
+  if (p.anaDone && !p.dmab){
+    /* 銜接情境：只推抗骨吸收 */
+    if (ok('zol')) add(first,'zol',['一年一次注射，銜接依從性好，適合接在骨生成藥療程之後。']);
+    if (ok('oralBP')) add(first,'oralBP',['取得性與價格最佳的銜接選擇。']);
+    if (ok('dmab')) add(first,'dmab',['骨密度維持效果好；但要記得它本身也不能任意停，需再規劃後續。']);
+  } else if (p.dmab){
+    /* 已在 denosumab：重點是「繼續」或「安全銜接」，不是重新選藥 */
+    add(first,'dmab',['<b>目前治療</b>：若治療反應良好、無新禁忌，繼續每 6 個月注射即可，重點是<b>不要延遲或中斷</b>。',
+                      '每次回診確認下次注射日期、鈣與維生素 D 攝取是否足量。'].concat(
+                      egfr==='lt35' ? ['eGFR &lt; 35：持續追蹤血鈣，低血鈣風險較高。'] : [],
+                      p.anaDone ? ['此病人是骨生成藥療程後接 denosumab —— 銜接方向正確，之後若要停 denosumab 仍需再接 bisphosphonate。'] : []));
+    if (ok('zol')) add(alt,'zol',['<b>停藥銜接用</b>：若需停用 denosumab，於末次注射後約 6 個月接上，一年一次、依從性佳。']);
+    if (ok('oralBP')) add(alt,'oralBP',['<b>停藥銜接用</b>：於末次注射後約 6 個月起始，需確認病人能遵守服藥方式。']);
+    if (risk==='vhigh'){
+      flags.push({t:'info',b:'使用 denosumab 期間仍屬極高風險',
+        c:'先確認依從性、注射是否延遲、鈣與維生素 D 是否足量，並重新評估次發性骨鬆原因。若確為治療反應不佳需升階為骨生成藥，請注意<b>由 denosumab 直接換成單用 teriparatide 可能出現暫時性骨密度下降</b>，換藥策略建議與專科討論。'});
+    }
+  } else if (anabolicFirst){
+    /* 極高風險：骨生成藥優先 */
+    if (ok('romo') && who==='postF'){
+      add(first,'romo',['極高風險停經後女性的優先選項，骨密度上升快、脊椎骨折降低明確。','固定 12 個月，結束後必接抗骨吸收藥。']);
+    } else if (ok('romo') && who==='M'){
+      add(alt,'romo',['骨密度上升快，但男性資料相對少，適應症與給付需先核對。','固定 12 個月，結束後必接抗骨吸收藥。']);
+    }
+    if (ok('tpd')){
+      var tn=['適合多發椎體骨折、極低 BMD、或抗骨吸收藥治療中仍再骨折者。','結束後必接抗骨吸收藥。'];
+      if (c.noDailyInj) tn.push('此病人無法每天自我注射 → 需家屬協助或改選其他方案，否則依從性會失敗。');
+      if (egfr==='lt35') tn.push('重度腎功能不全者使用經驗有限，需謹慎評估。');
+      if (c.noDailyInj || egfr==='lt35') add(alt,'tpd',tn); else add(first,'tpd',tn);
+    }
+    if (who==='M' && ok('romo')) flags.push({t:'info',b:'男性病人的骨生成藥選擇',c:'teriparatide 在男性有骨鬆治療資料；romosozumab 的證據與適應症以停經後女性為主，男性資料較少，使用前請核對適應症與給付。'});
+    /* 極高風險的抗骨吸收備案 */
+    if (ok('zol')) add(alt,'zol',['若骨生成藥不可行（給付、經濟、病人拒絕注射），zoledronic acid 是強度較高的抗骨吸收備案。']);
+    if (ok('dmab')) add(alt,'dmab',['腎功能不佳或腸胃道耐受差時的主力抗骨吸收藥。']);
+    if (!ok('romo') && !ok('tpd')) flags.push({t:'warn',b:'⚠ 兩種骨生成藥都受限',c:'此病人屬極高風險但骨生成藥均有禁忌或限制，請以最強可用的抗骨吸收藥治療，並考慮專科共同照護。'});
+  } else {
+    /* 高風險：抗骨吸收第一線 */
+    if (ok('oralBP')) add(first,'oralBP',['多數初治高風險病人的第一線，證據完整、成本低。','務必確認病人能遵守空腹與直立 30 分鐘的服藥方式。']);
+    if (ok('zol')) add(first,'zol',['一年一次，依從性最佳；避開口服耐受問題。','首次注射常有 1–3 天流感樣反應，事先告知可減少焦慮。']);
+    if (ok('dmab')){
+      var dn=['高齡、腸胃道耐受差或腎功能不佳者的常用選擇，每 6 個月一次。'];
+      if (egfr==='lt35') dn.push('eGFR &lt; 35：低血鈣風險明顯上升，起始前務必矯正鈣與維生素 D，並密切追蹤血鈣。');
+      if (egfr==='lt35' || bpBlocked) add(first,'dmab',dn); else add(alt,'dmab',dn);
+    }
+    if (ok('ral') && who==='postF'){
+      var rn=['以脊椎骨折保護為主，髖部證據不足，適合較年輕、以脊椎風險為主的病人。'];
+      var ralAlt = true;
+      if (c.menosx) rn.push('停經症狀明顯者可能因熱潮紅加重而難以耐受。');
+      if (age!==null && age>=70) rn.push('高齡（≥70 歲）以髖部骨折風險為主，不建議作為主力用藥。');
+      add(ralAlt?alt:first,'ral',rn);
+    }
+    if (ok('ht') && who==='postF' && c.menosx && (age===null || age<60)){
+      add(alt,'ht',['同時有明顯停經症狀且年齡 &lt; 60 歲（或停經 10 年內），荷爾蒙治療可一併處理症狀與骨質流失。','不作為單純骨鬆的首選，需與病人討論乳癌與血栓風險。']);
+    }
+  }
+
+  /* ---------- 通用提醒 ---------- */
+  if (c.hypocal){
+    flags.push({t:'warn',b:'⚠ 先矯正低血鈣與維生素 D 缺乏',c:'denosumab 與 zoledronic acid 在低血鈣狀態下可能造成嚴重低血鈣，<b>必須先補足鈣與維生素 D、複驗後再起始</b>。'});
+  }
+  if (c.dental){
+    flags.push({t:'info',b:'🦷 牙科時序',c:'建議<b>先完成侵入性牙科處置</b>再起始強效抗骨吸收藥（bisphosphonate、denosumab）。若骨折風險急迫不宜等待，與牙科協調時序，並加強口腔衛生與定期檢查；治療期間避免非必要的拔牙與植牙。'});
+  }
+  if (c.steroid){
+    flags.push({t:'info',b:'長期糖皮質類固醇使用中',c:'治療門檻應更積極，並與原處方科別討論類固醇能否減量或替代。此族群 bisphosphonate 與 teriparatide 均有相關資料，鈣與維生素 D 補充尤其重要。'});
+  }
+  if (who==='preF'){
+    flags.push({t:'info',b:'停經前女性',c:'先積極排除次發性骨鬆原因（內分泌、藥物、營養、發炎性疾病）。多數骨鬆藥物在此族群的資料有限，且有生育規劃者需特別考量（bisphosphonate 骨中半衰期長），建議專科共同評估。'});
+  }
+  if (c.breastHx){
+    flags.push({t:'info',b:'乳癌病史',
+      c:'荷爾蒙治療禁用。若正在使用<b>芳香環酶抑制劑</b>，屬治療引起的骨質流失，骨鬆治療門檻應更積極，並以 bisphosphonate 或 denosumab 為主；治療計畫請與腫瘤科同步。'});
+  }
+  if (p.bp && risk==='vhigh' && !p.dmab){
+    flags.push({t:'info',b:'已用過 bisphosphonate 仍屬極高風險',c:'若是在足量治療與良好依從性下仍發生骨折，屬治療反應不佳 → 重新檢視次發性因素與依從性，並考慮升階為骨生成藥。'});
+  }
+  if (first.length || alt.length){
+    flags.push({t:'tip',b:'✔ 所有方案的共同基礎',c:'元素鈣約 1000–1200 mg/日（飲食優先）、維生素 D 約 800–1000 IU/日；規律負重與肌力運動、平衡訓練與防跌；戒菸節酒。追蹤：1–2 年 DXA、起始後 3–6 個月可測 P1NP/CTX。'});
+  }
+
+  render({first:first,alt:alt,avoid:avoid,flags:flags});
+}
+
+function drugCard(item,kind){
+  var d = DRUGS[item.key];
+  var lis = item.notes.map(function(n){ return '<li>'+n+'</li>'; }).join('');
+  return '<div class="drug '+kind+'">'+
+           '<div class="name">'+d.name+'<span class="cls">'+d.cls+'</span></div>'+
+           '<div class="dose">'+d.dose+'</div>'+
+           '<ul>'+lis+'</ul>'+
+         '</div>';
+}
+
+/* 同一藥物可能被多條規則加入，合併理由並保留最高順位 */
+function dedupe(list){
+  var map={}, order=[];
+  list.forEach(function(it){
+    if (!map[it.key]){ map[it.key]={key:it.key,notes:it.notes.slice()}; order.push(it.key); }
+    else { it.notes.forEach(function(n){ if(map[it.key].notes.indexOf(n)<0) map[it.key].notes.push(n); }); }
+  });
+  return order.map(function(k){ return map[k]; });
+}
+
+function render(r){
+  var box = document.getElementById('result');
+  var first = dedupe(r.first), alt = dedupe(r.alt), avoid = dedupe(r.avoid);
+  var seen = {};
+  first.forEach(function(x){ seen[x.key]=1; });
+  alt = alt.filter(function(x){ return !seen[x.key]; });
+
+  var html = '';
+  if (first.length){
+    html += '<div class="rank">首選</div>';
+    html += first.map(function(x){ return drugCard(x,'first'); }).join('');
+  }
+  if (alt.length){
+    html += '<div class="rank">可考慮</div>';
+    html += alt.map(function(x){ return drugCard(x,'alt'); }).join('');
+  }
+  if (avoid.length){
+    html += '<div class="rank">避免 / 禁忌</div>';
+    html += avoid.map(function(x){ return drugCard(x,'avoid'); }).join('');
+  }
+  if (!first.length && !alt.length){
+    html += '<div class="placeholder">依目前條件沒有明確可推薦的選項，請檢視限制條件，並考慮專科共同照護。</div>';
+  }
+  html += r.flags.map(function(f){
+    return '<div class="flag '+f.t+'"><b>'+f.b+'</b>'+f.c+'</div>';
+  }).join('');
+
+  box.innerHTML = html;
+}
+
+function resetForm(){
+  document.getElementById('age').value='';
+  document.querySelectorAll('.cx').forEach(function(c){ c.checked=false; });
+  document.querySelectorAll('.px').forEach(function(c){ c.checked = (c.value==='none'); });
+  document.querySelector('input[name=risk][value=high]').checked=true;
+  document.querySelector('input[name=who][value=postF]').checked=true;
+  document.querySelector('input[name=egfr][value=ge60]').checked=true;
+  pick();
+}
+
+document.addEventListener('input', pick);
+document.addEventListener('change', pick);
+/* 每次開啟或重新整理都從乾淨狀態開始，避免殘留上一位病人的勾選。
+   瀏覽器會在載入後自行復原表單狀態，因此關閉 autocomplete 並在 load 之後再清一次。 */
+document.querySelectorAll('input').forEach(function(i){ i.setAttribute('autocomplete','off'); });
+resetForm();
+window.addEventListener('load', function(){ resetForm(); setTimeout(resetForm, 0); });
+</script>
+</body>
+</html>

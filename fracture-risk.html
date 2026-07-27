@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骨質疏鬆骨折風險評估工具</title>
+<style>
+  :root{
+    --bg:#F3FBFF; --bg2:#E0F7FA; --surface:#FFFFFF;
+    --text:#0F172A; --text2:#334155; --muted:#64748B;
+    --sky:#0EA5E9; --sky-d:#0369A1; --emerald:#22C55E; --emerald-d:#15803D;
+    --amber:#F59E0B; --amber-d:#B45309; --rose:#E11D48; --rose-d:#9F1239;
+    --border:rgba(14,165,233,.16); --shadow:0 10px 30px rgba(15,23,42,.08);
+    --font: "Microsoft JhengHei","PingFang TC","Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:linear-gradient(180deg,#F8FDFF 0%,#EEF9FF 100%);color:var(--text);font-family:var(--font);min-height:100vh}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(1rem,3vw,2.5rem)}
+  header.top{text-align:center;margin-bottom:1.6rem}
+  header.top .icon{font-size:56px;line-height:1;margin-bottom:.4rem}
+  header.top h1{font-size:clamp(1.6rem,3.4vw,2.4rem);font-weight:900;color:var(--sky-d);letter-spacing:-.5px}
+  header.top p{color:var(--text2);font-weight:600;margin-top:.4rem;font-size:clamp(.85rem,1.4vw,1rem)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:1.1rem;box-shadow:var(--shadow);padding:1.4rem 1.5rem}
+  .card h2{font-size:1.15rem;font-weight:800;color:var(--sky-d);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+  .fg{margin-bottom:1.15rem}
+  .fg > label.q{display:block;font-weight:700;color:var(--text);margin-bottom:.5rem;font-size:.95rem}
+  .fg .hint{font-weight:500;color:var(--muted);font-size:.8rem}
+  .opts{display:flex;flex-wrap:wrap;gap:.5rem}
+  .opts label{display:inline-flex;align-items:center;gap:.4rem;background:#F7FBFE;border:1px solid #E2EEF6;border-radius:.6rem;
+    padding:.5rem .8rem;font-size:.88rem;cursor:pointer;transition:.15s;color:var(--text2)}
+  .opts label:hover{background:#EAF6FD;border-color:#BAE6FD}
+  .opts input{accent-color:var(--sky);width:16px;height:16px}
+  .opts input:checked + span{font-weight:700;color:var(--sky-d)}
+  input[type=number]{width:120px;padding:.5rem .7rem;border:1px solid #CCD7E4;border-radius:.55rem;font-size:.95rem;font-family:inherit}
+  input[type=number]:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(14,165,233,.15)}
+  .inline{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  @media(max-width:520px){.checks{grid-template-columns:1fr}}
+  .checks label{display:flex;align-items:flex-start;gap:.5rem;background:#F7FBFE;border:1px solid #E2EEF6;border-radius:.6rem;
+    padding:.55rem .7rem;font-size:.85rem;cursor:pointer;color:var(--text2);line-height:1.35}
+  .checks input{accent-color:var(--sky);width:16px;height:16px;margin-top:2px;flex-shrink:0}
+  .btns{display:flex;gap:.7rem;margin-top:.4rem}
+  .btn{border:none;border-radius:.6rem;padding:.6rem 1.1rem;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .btn-ghost{background:#EAF0F5;color:#475569}.btn-ghost:hover{background:#dde6ee}
+  .btn-print{background:var(--sky);color:#fff}.btn-print:hover{background:#0284c7}
+  .frax-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:.55rem;background:#EFF6FF;color:#1D4ED8;
+    border:1px solid #BFDBFE;border-radius:.55rem;padding:.5rem .85rem;font-size:.85rem;font-weight:700;text-decoration:none;cursor:pointer}
+  .frax-link:hover{background:#DBEAFE;border-color:#93C5FD}
+  .frax-note{font-size:.78rem;color:var(--muted);margin-top:.4rem;line-height:1.45}
+
+  /* result */
+  .badge{border-radius:1rem;padding:1.1rem 1.3rem;color:#fff;margin-bottom:1.1rem;box-shadow:var(--shadow)}
+  .badge .lvl{font-size:1.5rem;font-weight:900;letter-spacing:.5px}
+  .badge .en{opacity:.9;font-size:.85rem;letter-spacing:2px;text-transform:uppercase;font-weight:700}
+  .badge.low{background:linear-gradient(135deg,#64748B,#94A3B8)}
+  .badge.high{background:linear-gradient(135deg,#F59E0B,#FBBF24)}
+  .badge.vhigh{background:linear-gradient(135deg,#E11D48,#FB7185)}
+  .badge.none{background:linear-gradient(135deg,#0EA5E9,#38BDF8)}
+  .why{background:#F0F9FF;border:1px solid #BAE6FD;border-radius:.8rem;padding:.9rem 1rem;margin-bottom:1rem}
+  .why h3{font-size:.9rem;color:var(--sky-d);font-weight:800;margin-bottom:.5rem}
+  .why ul{list-style:none;display:flex;flex-direction:column;gap:.35rem}
+  .why li{font-size:.87rem;color:var(--text2);display:flex;gap:.5rem;line-height:1.4}
+  .why li::before{content:"▍";color:var(--sky)}
+  .rec{margin:0 0 1.1rem;background:#F9FCFF;border:1px solid #E2F1FA;border-radius:.9rem;padding:.5rem 1.1rem 1.1rem}
+  .rec h3{font-size:1.12rem;font-weight:900;color:var(--sky-d);margin:1rem 0 .6rem;border-left:5px solid var(--sky);padding-left:.65rem}
+  .rec ul{padding-left:1.2rem;display:flex;flex-direction:column;gap:.6rem}
+  .rec li{font-size:1.05rem;color:var(--text2);line-height:1.7}
+  .rec li strong,.rec li b{color:var(--text);font-weight:900}
+  .flag{border-radius:.8rem;padding:.85rem 1rem;margin-bottom:.85rem;font-size:.86rem;line-height:1.5}
+  .flag.warn{background:#FEF2F2;border:1px solid #FECACA;color:#7f1d1d}
+  .flag.info{background:#FEFCE8;border:1px solid #FDE68A;color:#713f12}
+  .flag.tip{background:#F0FDF4;border:1px solid #BBF7D0;color:#14532d}
+  .flag b{display:block;margin-bottom:.25rem;font-size:.9rem}
+  .placeholder{color:var(--muted);text-align:center;padding:2.5rem 1rem;font-size:.95rem}
+  details.special{margin-top:1rem;background:#F8FDFF;border:1px solid var(--border);border-radius:.8rem;padding:.4rem .9rem}
+  details.special summary{cursor:pointer;font-weight:800;color:var(--sky-d);padding:.55rem 0;font-size:.92rem}
+  details.special ul{padding:.3rem 0 .8rem 1.1rem;display:flex;flex-direction:column;gap:.45rem}
+  details.special li{font-size:.85rem;color:var(--text2);line-height:1.45}
+  .disclaimer{margin-top:1.6rem;font-size:.78rem;color:var(--muted);line-height:1.6;text-align:center;padding:0 1rem}
+  @media print{
+    body{background:#fff}
+    .inputCard,.btns,.nav,details.special summary{}
+    .btns{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="icon">🦴</div>
+    <h1>骨質疏鬆骨折風險評估工具</h1>
+    <p>骨折史 → DXA → FRAX 分層　·　自動對應治療強度與轉診提示</p>
+  </header>
+
+  <div class="grid">
+    <!-- INPUT -->
+    <div class="card inputCard">
+      <h2>① 病人資料</h2>
+
+      <div class="fg">
+        <label class="q">性別</label>
+        <div class="opts">
+          <label><input type="radio" name="sex" value="F" checked><span>女性</span></label>
+          <label><input type="radio" name="sex" value="M"><span>男性</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="q">年齡　<span class="hint">（歲）</span></label>
+        <div class="inline"><input type="number" id="age" min="0" max="120" placeholder="例 68"></div>
+      </div>
+
+      <div class="fg">
+        <label class="q">脆弱性骨折史　<span class="hint">（低能量、非外力性骨折）</span></label>
+        <div class="opts" id="fxGroup">
+          <label><input type="radio" name="fx" value="none" checked><span>無</span></label>
+          <label><input type="radio" name="fx" value="single"><span>單一次</span></label>
+          <label><input type="radio" name="fx" value="hipvert"><span>髖部或椎體</span></label>
+          <label><input type="radio" name="fx" value="multi"><span>多發性</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="q">最近一次脆弱性骨折是否在近 2 年內？</label>
+        <div class="opts">
+          <label><input type="radio" name="recent" value="no" checked><span>否 / 無骨折</span></label>
+          <label><input type="radio" name="recent" value="yes"><span>是（近 24 個月內）</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="q">DXA T-score　<span class="hint">（取脊椎/髖部/股骨頸最低值）</span></label>
+        <div class="inline">
+          <input type="number" id="tscore" step="0.1" min="-6" max="3" placeholder="例 -2.8">
+          <span class="hint">留空表示尚無 DXA</span>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="q">DXA Z-score　<span class="hint">（年輕病人排除次發性用，選填）</span></label>
+        <div class="inline"><input type="number" id="zscore" step="0.1" min="-6" max="3" placeholder="例 -2.1"></div>
+      </div>
+
+      <div class="fg">
+        <label class="q">FRAX 10 年骨折風險　<span class="hint">（選填，%）</span></label>
+        <div class="inline">
+          <label class="hint">主要骨鬆性&nbsp;</label><input type="number" id="fraxMajor" step="0.1" min="0" max="100" placeholder="例 22">
+          <label class="hint">&nbsp;髖部&nbsp;</label><input type="number" id="fraxHip" step="0.1" min="0" max="100" placeholder="例 3.5">
+        </div>
+        <a class="frax-link" href="https://www.fraxplus.org/calculation-tool" target="_blank" rel="noopener">🔗 開啟 FRAX 線上計算器</a>
+        <div class="frax-note">開啟後，計算器上方的<b>地區(Location)請選「Taiwan」</b>；填完按 Calculate，把 <b>Major osteoporotic</b> 與 <b>Hip</b> 兩個 % 填回上面兩格。</div>
+      </div>
+
+      <div class="fg">
+        <label class="q">治療中仍發生骨折？</label>
+        <div class="opts">
+          <label><input type="radio" name="onTx" value="no" checked><span>否</span></label>
+          <label><input type="radio" name="onTx" value="yes"><span>是（治療期間再骨折）</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="q">其他臨床危險因子　<span class="hint">（可複選）</span></label>
+        <div class="checks">
+          <label><input type="checkbox" class="rf" value="長期使用糖皮質類固醇"><span>長期糖皮質類固醇</span></label>
+          <label><input type="checkbox" class="rf" value="一年內曾跌倒"><span>近一年曾跌倒</span></label>
+          <label><input type="checkbox" class="rf" value="父母有髖部骨折史"><span>父母髖部骨折</span></label>
+          <label><input type="checkbox" class="rf" value="目前吸菸"><span>目前吸菸</span></label>
+          <label><input type="checkbox" class="rf" value="過量飲酒"><span>過量飲酒</span></label>
+          <label><input type="checkbox" class="rf" value="類風濕性關節炎"><span>類風濕性關節炎</span></label>
+          <label><input type="checkbox" class="rf" value="早發停經（<45 歲）"><span>早發停經(<45歲)</span></label>
+          <label><input type="checkbox" class="rf" value="體重過輕（BMI<18.5）"><span>體重過輕</span></label>
+        </div>
+      </div>
+
+      <div class="btns">
+        <button class="btn btn-ghost" onclick="resetForm()">重置</button>
+        <button class="btn btn-print" onclick="window.print()">列印評估結果</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div class="card">
+      <h2>② 風險分層與建議</h2>
+      <div id="result">
+        <div class="placeholder">請在左側輸入病人資料，結果會即時更新。</div>
+      </div>
+
+      <details class="special">
+        <summary>特殊情境選藥提示（點開）</summary>
+        <ul>
+          <li><strong>腎功能不佳：</strong>避免或慎用 bisphosphonate；denosumab 常是可行選項，但要先矯正低鈣與維生素 D 缺乏。</li>
+          <li><strong>近期牙科侵入處置：</strong>治療前先評估牙科計畫，強效抗骨吸收藥使用者需溝通顎骨壞死風險。</li>
+          <li><strong>VTE 或中風風險：</strong>使用 SERM 要注意血栓與中風風險，通常不作高齡高風險族群第一優先。</li>
+          <li><strong>停藥規劃：</strong>Bisphosphonate 可談藥物假期；denosumab 不建議直接停；骨生成藥療程結束後都要接後續保骨藥。</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <p class="disclaimer">
+    本工具為門診決策輔助，分層門檻依實證概念與教學流程設計，並非硬性診斷標準。<br>
+    實際治療請結合完整臨床判斷、最新指引與健保給付規定。FRAX 治療門檻預設採常用參考值（主要骨鬆性 ≥20%、髖部 ≥3%），請依院內政策調整。
+  </p>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const val = name => { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; };
+const num = id => { const v = parseFloat($('#'+id).value); return isNaN(v) ? null : v; };
+
+function assess(){
+  const sex = val('sex');
+  const age = num('age');
+  const fx = val('fx');                 // none/single/hipvert/multi
+  const recent = val('recent') === 'yes';
+  const t = num('tscore');
+  const z = num('zscore');
+  const fMajor = num('fraxMajor');
+  const fHip = num('fraxHip');
+  const onTx = val('onTx') === 'yes';
+  const rfs = Array.from(document.querySelectorAll('.rf:checked')).map(c=>c.value);
+
+  const hasFx = fx !== 'none';
+  const reasons = [];
+
+  // ---- FRAX 門檻（可依院內調整）----
+  const fraxHigh = (fMajor!==null && fMajor>=20) || (fHip!==null && fHip>=3);
+
+  // ---- 極高風險 ----
+  let level = null;
+  if (fx === 'multi') { level='vhigh'; reasons.push('多發性脆弱性骨折'); }
+  else if (onTx) { level='vhigh'; reasons.push('治療期間仍再發生骨折'); }
+  else if (hasFx && recent) { level='vhigh'; reasons.push('近 2 年內發生脆弱性骨折'); }
+  else if (t!==null && t<=-3.0) { level='vhigh'; reasons.push('T-score ≤ -3.0（骨密度極低）'); }
+  else if ((fx==='hipvert') && t!==null && t<=-2.5) { level='vhigh'; reasons.push('髖部/椎體脆弱性骨折合併 T-score ≤ -2.5'); }
+
+  // ---- 高風險 ----
+  if (!level){
+    if (hasFx){ level='high'; reasons.push('已有脆弱性骨折'); }
+    else if (t!==null && t<=-2.5){ level='high'; reasons.push('T-score ≤ -2.5（符合骨鬆診斷）'); }
+    else if (fraxHigh){ level='high'; reasons.push('FRAX 達治療門檻'
+        + (fMajor!==null&&fMajor>=20?`（主要骨鬆性 ${fMajor}% ≥20%）`:'')
+        + (fHip!==null&&fHip>=3?`（髖部 ${fHip}% ≥3%）`:'')); }
+  }
+
+  // ---- 低風險 / 資料不足 ----
+  let insufficient = false;
+  if (!level){
+    if (t===null && !hasFx && fMajor===null && fHip===null){
+      insufficient = true;
+    } else {
+      level='low';
+      if (t!==null && t>-2.5 && t<=-1.0) reasons.push('T-score 介於 -1.0 ~ -2.5（骨質缺乏 osteopenia）');
+      else if (t!==null && t>-1.0) reasons.push('T-score > -1.0（骨密度正常範圍）');
+      if (!hasFx) reasons.push('無脆弱性骨折史');
+      if (fraxHigh===false && (fMajor!==null||fHip!==null)) reasons.push('FRAX 未達治療門檻');
+    }
+  }
+
+  // ---- 次發性骨鬆 workup 提示 ----
+  const secondary = [];
+  if (age!==null && ((sex==='F' && age<50) || (sex==='M' && age<50))) secondary.push('年齡 < 50 歲');
+  if (z!==null && z<=-2.0) secondary.push('Z-score ≤ -2.0');
+  if (fx==='multi') secondary.push('多發性脆弱性骨折');
+  if (hasFx && recent) secondary.push('近期脆弱性骨折');
+  if (t!==null && t<=-3.0) secondary.push('T-score ≤ -3.0');
+  if (onTx) secondary.push('治療反應不佳（治療中再骨折）');
+
+  render({level,insufficient,reasons,secondary,rfs,age,sex});
+}
+
+function render(r){
+  const box = $('#result');
+  if (r.insufficient){
+    box.innerHTML = `<div class="placeholder">資料還不足以分層。<br>請至少提供 <b>DXA T-score</b>、<b>骨折史</b> 或 <b>FRAX</b> 其中一項。</div>`;
+    return;
+  }
+
+  const meta = {
+    vhigh:{cls:'vhigh',zh:'極高風險',en:'Very High Risk'},
+    high:{cls:'high',zh:'高風險',en:'High Risk'},
+    low:{cls:'low',zh:'低風險',en:'Low Risk'}
+  }[r.level];
+
+  let html = `<div class="badge ${meta.cls}"><div class="en">${meta.en}</div><div class="lvl">${meta.zh}</div></div>`;
+
+  html += `<div class="why"><h3>判斷依據</h3><ul>${r.reasons.map(x=>`<li>${x}</li>`).join('')}`;
+  if (r.rfs.length) html += `<li>合併危險因子：${r.rfs.join('、')}</li>`;
+  html += `</ul></div>`;
+
+  // ---- 個人化生活型態建議（依實際勾選的危險因子生成）----
+  const rfs = r.rfs;
+  const life = [];
+  life.push('<strong>營養：</strong>確保鈣質與維生素 D 攝取充足。');
+  life.push('<strong>運動：</strong>規律負重與肌力訓練。');
+  if (rfs.includes('一年內曾跌倒'))
+    life.push('<strong>跌倒預防（此病人近一年曾跌倒，需加強）：</strong>居家環境改善、平衡訓練、視力與用藥檢視。');
+  else
+    life.push('<strong>跌倒預防：</strong>居家環境、視力與用藥檢視。');
+  if (rfs.includes('目前吸菸'))
+    life.push('<strong>戒菸：</strong>吸菸會降低骨密度並增加骨折風險，建議戒菸。');
+  if (rfs.includes('過量飲酒'))
+    life.push('<strong>節制飲酒：</strong>建議每日酒精 ≤ 2 單位。');
+  if (rfs.includes('長期使用糖皮質類固醇'))
+    life.push('<strong>類固醇檢視：</strong>與原處方科別討論能否減量或替代；長期使用者治療門檻較低，可積極介入。');
+  if (rfs.includes('體重過輕（BMI<18.5）'))
+    life.push('<strong>營養與體重：</strong>體重過輕，建議營養評估與適度增重。');
+  if (rfs.includes('類風濕性關節炎'))
+    life.push('<strong>疾病控制：</strong>與風濕科合作控制發炎活性。');
+  const lifeUl = life.map(x=>`<li>${x}</li>`).join('');
+
+  // recommendations
+  html += `<div class="rec">`;
+  if (r.level==='low'){
+    html += `<h3>建議處置：生活型態與追蹤</h3><ul>${lifeUl}
+      <li><strong>追蹤：</strong>定期重評；若為骨質缺乏(osteopenia)且 FRAX 偏高，可與病人討論是否提早藥物治療。</li></ul>`;
+  } else if (r.level==='high'){
+    html += `<h3>藥物：起始抗骨吸收藥（第一線）</h3><ul>
+      <li><strong>Bisphosphonate：</strong>多數高風險初始病人的第一線，證據完整。口服需能遵守服藥姿勢；腎功能差時不適合。</li>
+      <li><strong>Denosumab：</strong>適合高齡、胃食道耐受差或腎功能不佳者，每 6 個月注射一次，依從性佳。</li>
+      <li><strong>追蹤：</strong>1–2 年追蹤 DXA；起始後 3–6 個月可測 BTM（P1NP/CTX）看反應與依從性。</li></ul>
+      <h3>基礎與個人化措施</h3><ul>${lifeUl}</ul>`;
+  } else {
+    html += `<h3>藥物：優先骨生成藥物序貫治療（先築骨、後保骨）</h3><ul>
+      <li><strong>Teriparatide 類：</strong>適合多發椎體骨折、極低 BMD、或已用抗骨吸收藥仍再骨折者；<b>療程結束後必須接續抗骨吸收藥</b>維持療效。</li>
+      <li><strong>Romosozumab：</strong>適用極高風險停經後女性（臨床記憶點：T ≤ -3、≥2 處骨折、或抗骨吸收藥用滿一年仍骨折）；<b>近一年心肌梗塞或中風者避免使用</b>。</li>
+      <li><strong>建議專科 input</strong>；追蹤 1–2 年 DXA、3–6 月 BTM。</li></ul>
+      <h3>基礎與個人化措施</h3><ul>${lifeUl}</ul>`;
+  }
+  html += `</div>`;
+
+  // denosumab caution for high/vhigh
+  if (r.level!=='low'){
+    html += `<div class="flag warn"><b>⚠ Denosumab 停藥必看</b>不能任意停 denosumab；停藥前一定要先安排 bisphosphonate 銜接，否則有反彈性多發椎體骨折風險。</div>`;
+  }
+
+  // secondary workup
+  if (r.secondary.length){
+    html += `<div class="flag info"><b>🔬 建議評估次發性骨鬆</b>
+      符合：${r.secondary.join('、')}。<br>
+      基本抽血：CBC、Cr/eGFR、AST/ALT、albumin、ALP、glucose、Ca、P、25(OH)D、iPTH、TSH${r.sex==='M'?'、total testosterone':''}。<br>
+      視結果轉診：PTH/Ca 異常→內分泌科；eGFR↓ P↑ PTH↑→腎臟科；貧血+高鈣+骨痛→血液科。</div>`;
+  } else {
+    html += `<div class="flag tip"><b>✔ 目前未觸發次發性骨鬆積極評估條件</b>仍可視臨床情況補基本骨鈣磷軸與 TSH。</div>`;
+  }
+
+  box.innerHTML = html;
+}
+
+function resetForm(){
+  document.querySelectorAll('input[type=number]').forEach(i=>i.value='');
+  document.querySelectorAll('.rf').forEach(c=>c.checked=false);
+  document.querySelector('input[name=sex][value=F]').checked=true;
+  document.querySelector('input[name=fx][value=none]').checked=true;
+  document.querySelector('input[name=recent][value=no]').checked=true;
+  document.querySelector('input[name=onTx][value=no]').checked=true;
+  assess();
+}
+
+document.addEventListener('input', assess);
+document.addEventListener('change', assess);
+assess();
+</script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>骨質疏鬆門診工具</title>
+<style>
+  :root{
+    --surface:#FFFFFF;
+    --text:#0F172A; --text2:#334155; --muted:#64748B;
+    --sky:#0EA5E9; --sky-d:#0369A1; --sky-l:#E0F2FE;
+    --emerald-d:#15803D; --amber-d:#B45309;
+    --border:rgba(14,165,233,.16); --shadow:0 10px 30px rgba(15,23,42,.08);
+    --font: "Microsoft JhengHei","PingFang TC","Noto Sans TC",-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:linear-gradient(180deg,#F8FDFF 0%,#EEF9FF 100%);color:var(--text);font-family:var(--font);min-height:100vh}
+  .wrap{max-width:900px;margin:0 auto;padding:clamp(1.2rem,4vw,3rem)}
+  header{text-align:center;margin-bottom:2rem}
+  header .icon{font-size:60px;line-height:1;margin-bottom:.5rem}
+  header h1{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:900;color:var(--sky-d);letter-spacing:-.5px}
+  header p{color:var(--text2);font-weight:600;margin-top:.5rem;font-size:clamp(.9rem,1.5vw,1.05rem);line-height:1.7}
+
+  .cards{display:flex;flex-direction:column;gap:1.1rem}
+  a.card{display:block;text-decoration:none;background:var(--surface);border:1px solid var(--border);
+         border-radius:1.1rem;box-shadow:var(--shadow);padding:1.3rem 1.5rem;transition:.18s}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(15,23,42,.12);border-color:#BAE6FD}
+  .card .top{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;margin-bottom:.5rem}
+  .card h2{font-size:1.25rem;font-weight:900;color:var(--sky-d)}
+  .card .who{font-size:.75rem;font-weight:800;border-radius:999px;padding:.18rem .6rem;white-space:nowrap}
+  .who.dr{background:var(--sky-l);color:var(--sky-d)}
+  .who.pt{background:#DCFCE7;color:var(--emerald-d)}
+  .card p{font-size:.95rem;color:var(--text2);line-height:1.7}
+  .card ul{margin:.5rem 0 0 1.2rem;color:var(--muted);font-size:.87rem;line-height:1.7}
+
+  .note{margin-top:2rem;background:#F0F9FF;border:1px solid #BAE6FD;border-radius:.9rem;padding:1rem 1.2rem;
+        font-size:.87rem;color:#0c4a6e;line-height:1.7}
+  .note b{display:block;margin-bottom:.3rem}
+  footer{margin-top:1.6rem;text-align:center;font-size:.78rem;color:var(--muted);line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="icon">&#129460;</div>
+    <h1>骨質疏鬆門診工具</h1>
+    <p>風險評估 · 病人衛教 · 藥物選擇<br>三個工具都可直接在手機或電腦上使用，不需安裝或登入</p>
+  </header>
+
+  <div class="cards">
+    <a class="card" href="fracture-risk.html">
+      <div class="top"><h2>骨折風險評估工具</h2><span class="who dr">醫療人員</span></div>
+      <p>輸入骨折史、DXA T-score 與 FRAX，自動分層為低／高／極高風險，並對應治療強度與轉診提示。</p>
+      <ul>
+        <li>即時分層，附判斷依據</li>
+        <li>依勾選的危險因子產生個人化生活型態建議</li>
+        <li>自動提示是否需評估次發性骨質疏鬆</li>
+      </ul>
+    </a>
+
+    <a class="card" href="drug-selection.html">
+      <div class="top"><h2>藥物選擇工具</h2><span class="who dr">醫療人員</span></div>
+      <p>依風險分層、腎功能、共病與用藥史，給出選藥順位、禁忌與停藥銜接計畫。含各類藥物比較表與商品名對照。</p>
+      <ul>
+        <li>選藥決策：首選／可考慮／避免禁忌</li>
+        <li>藥物比較表、病人用藥衛教口語稿</li>
+        <li>藥物假期、denosumab 不可空窗、骨生成藥後銜接</li>
+      </ul>
+    </a>
+
+    <a class="card" href="patient-education.html">
+      <div class="top"><h2>病人衛教單張</h2><span class="who pt">給病人</span></div>
+      <p>用看得懂的說法解釋骨質疏鬆：為什麼沒感覺、骨折的後果、鈣質怎麼算、在家怎麼運動與防跌。</p>
+      <ul>
+        <li>互動式鈣質攝取計算</li>
+        <li>各類藥物用法一覽</li>
+        <li>回診前想問的問題清單</li>
+      </ul>
+    </a>
+  </div>
+
+  <div class="note">
+    <b>使用說明</b>
+    三個頁面都是獨立的單頁工具，資料只在你的裝置上計算，不會傳送或儲存任何內容；關掉頁面就消失，重新開啟一律是空白表單。
+    風險評估與藥物選擇兩個工具是<b style="display:inline">門診決策輔助與教學用途</b>，分層與選藥邏輯依實證概念與常用臨床流程設計，並非硬性診斷或處方標準；
+    健保給付規定（門檻、療程年限、換藥規定）會不時修訂，工具內刻意未寫死條文，處方前請核對當期公告。
+  </div>
+
+  <footer>
+    實際治療請結合完整臨床判斷、最新指引與藥品說明書。<br>
+    本站為門診自用工具，不取代醫療專業人員的診療。
+  </footer>
+</div>
+</body>
+</html>
