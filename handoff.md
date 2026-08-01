@@ -25,17 +25,17 @@
 
 - **repo 是公開的**（為了 GitHub Pages）。院內給付條文、病人資料一律不可進 repo。
 - **流程就四步**：`git pull` → 改檔 → `commit` + `push`（Pages 約 1–2 分重建）→ 收工更新本檔再 push。
-- **不要用 OneDrive 同步這個 repo**。每台電腦各自 `git clone`，路徑放在 OneDrive 以外。家用：`C:\projects\osteoporosis-clinic\`。
+- **兩台電腦都有 Claude Code 與 GitHub，工作副本路徑一致＝`C:\projects\osteoporosis-clinic\`**（家用 DESKTOP-LVSV9Q5、醫院 X108521，2026-07-28 醫院端已 clone 並定位完成）。醫院無法安裝 Google Drive 桌面版（沒有 `G:\`，本專案已不依賴）。
+- ⚠️ **不要用 OneDrive 同步這個 repo**。OneDrive 同步 `.git` 會造成 lock 衝突與衝突複本；跨電腦一律靠 git。
   檔案分工：程式碼走 git；Office 檔、分析產出、Obsidian vault 走 OneDrive；臨床原始資料集中 Google Drive。
-- **醫院電腦**有 Claude Code 與 GitHub，流程與家中相同；但**無法安裝 Google Drive 桌面版**（沒有 `G:\`，本專案已不依賴）。首次要先 clone。
 - **改內容時頁尾版本號與日期要一起更新**（藥物選擇工具 v1.1、其餘三頁 v1.0，皆 2026-07-28）；署名與授權區塊不要拿掉。
 - 用藥史選項只顯示藥名（bisphosphonate／denosumab／SERM 荷爾蒙／骨生成藥），但**判斷邏輯的語意仍是「denosumab＝目前仍在使用」「骨生成藥＝療程剛結束」**；輸出的提示文字保留完整敘述。
-- **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名、不掛醫院名。
+- **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名（潘湘如醫師｜家醫科）、不掛醫院名。
 - Google Doc（專案總覽）無法用 Drive 連接器修改，要改得用 claude-in-chrome 開瀏覽器；在 Docs 裡用座標點擊定位游標容易打偏，輸入前先截圖確認。
 - 待清理：`C:\projects\_osteoporosis_舊OneDrive副本\`（舊工作副本，內容與 GitHub 相同，潘醫師確認後可刪）。
 
 ## 🕐 最後更新
 
-- 時間：2026-07-28 06:20
-- 更新者：阿克（Claude Code, Opus 5）@ DESKTOP-LVSV9Q5
+- 時間：2026-07-28 07:35
+- 更新者：阿克（Claude Code, Opus 5）@ DESKTOP-LVSV9Q5（併入醫院端 X108521 於 07:27 推的路徑補記）
 - Git push：✅ 已推
