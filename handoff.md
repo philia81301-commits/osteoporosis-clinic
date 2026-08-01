@@ -4,33 +4,38 @@
 
 ## ⏯️ 目前做到哪
 
-專案初始化完成（L1 + L2 + L3），三個工具第一版已上線 GitHub Pages。2026-07-28 追加：刪除 Drive 的 HTML 快照（Drive 只留專案總覽 Doc）、四個頁面加上署名與版本號、授權定為 CC BY-NC-ND 4.0 並新增 LICENSE、**家用工作副本從 OneDrive 搬到 `C:\projects\osteoporosis-clinic\`**（跨電腦改為純 git 同步）。
+三個工具第一版完成並上線 GitHub Pages；專案初始化至第三層級。2026-07-28 這輪把「對外」與「位置」整理乾淨：
+四頁加上署名（潘湘如醫師｜家醫科）＋版本號 v1.0、授權定為 CC BY-NC-ND 4.0 並附 LICENSE、刪掉 Drive 的過時 HTML 快照、
+家用工作副本從 OneDrive 搬到 `C:\projects\osteoporosis-clinic\`，跨電腦改為純 git 同步。
 
 ## 🚦 目前狀態
 
-- **可運行**。線上版四個頁面（入口 + 三工具）皆驗證 HTTP 200，JavaScript 在線上版正常執行。
-- 本機 repo 乾淨、與 GitHub 同步。
-- 沒有做一半的東西；下一步是等門診試用後的回饋。
+- **可運行**。線上版四頁（入口 + 三工具）皆 HTTP 200，署名與授權區塊已在線上驗證。
+- 工作副本乾淨、與 GitHub 同步。沒有做一半的東西。
+- 藥物選擇工具的「過去骨鬆用藥史」選項已簡化為純藥名（v1.1）；其餘工具內容自 07-27 起未再改動。
 
 ## ➡️ 下一步
 
-1. 門診實際試用三個工具，收集要修的點（尤其藥物選擇的選藥順位是否符合實際習慣）
+1. **門診實際試用三個工具**，收集要修的點（重點：藥物選擇的選藥順位是否符合實際習慣）
 2. 決定要不要加固定的院內版健保給付欄——若要，需先提供目前依循的給付版本
-3. 產出給 OpenCode 學習的交接包（獨立資料夾 + AGENTS.md，重點寫決策理由與踩過的坑）
+3. 開新專案「肌少症門診工具」時：說「初始化專案：肌少症門診工具，要公開上 GitHub Pages」，repo 直接建在 `C:\projects\`
+4. （選配）把可複用的部分做成醫療工具專案模板；（選配）產出給 OpenCode 學習的交接包
 
 ## ⚠️ 注意事項
 
 - **repo 是公開的**（為了 GitHub Pages）。院內給付條文、病人資料一律不可進 repo。
-- **改動只要兩步**：改本機 repo → `git push`（Pages 自動重建）。2026-07-28 起**已停止維護 Drive 的 HTML 鏡像**，Drive 只保留「專案總覽」Google Doc；那三個資料夾裡的 HTML 是 07-27 快照，不要當最新版用。
-- **改內容時頁尾版本號與日期要一起更新**（目前 v1.0 / 2026-07-28），那是使用者判斷手上是不是最新版的唯一依據；署名與授權區塊不要拿掉。
-- **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名（潘湘如醫師｜家醫科）、不掛醫院名。
-- **兩台電腦都有 Claude Code 與 GitHub**，流程相同：`git pull` → 改檔 → commit → push → 收工更新 handoff.md 再 push。家用工作副本在 `C:\projects\osteoporosis-clinic\`；醫院那台自行 `git clone`，**路徑同樣放在 OneDrive 以外**。醫院無法安裝 Google Drive 桌面版（沒有 `G:\`，本專案已不依賴）。
-- ⚠️ **不要用 OneDrive 同步這個 repo**。OneDrive 同步 `.git` 會造成 lock 衝突與衝突複本；跨電腦一律靠 git。檔案分工：程式碼走 git、Excel／PPT／Word／分析產出／Obsidian vault 走 OneDrive。
-- 舊的 OneDrive 工作副本已移到 `C:\projects\_osteoporosis_舊OneDrive副本\`（內容與 GitHub 相同，確認無誤後可自行刪除）。
-- Google Doc 的內容無法用 Drive 連接器修改，要改專案總覽得用 claude-in-chrome 開瀏覽器（擴充功能偶爾沒連上，重試即可）。
+- **流程就四步**：`git pull` → 改檔 → `commit` + `push`（Pages 約 1–2 分重建）→ 收工更新本檔再 push。
+- **不要用 OneDrive 同步這個 repo**。每台電腦各自 `git clone`，路徑放在 OneDrive 以外。家用：`C:\projects\osteoporosis-clinic\`。
+  檔案分工：程式碼走 git；Office 檔、分析產出、Obsidian vault 走 OneDrive；臨床原始資料集中 Google Drive。
+- **醫院電腦**有 Claude Code 與 GitHub，流程與家中相同；但**無法安裝 Google Drive 桌面版**（沒有 `G:\`，本專案已不依賴）。首次要先 clone。
+- **改內容時頁尾版本號與日期要一起更新**（藥物選擇工具 v1.1、其餘三頁 v1.0，皆 2026-07-28）；署名與授權區塊不要拿掉。
+- 用藥史選項只顯示藥名（bisphosphonate／denosumab／SERM 荷爾蒙／骨生成藥），但**判斷邏輯的語意仍是「denosumab＝目前仍在使用」「骨生成藥＝療程剛結束」**；輸出的提示文字保留完整敘述。
+- **對外掛機構名稱前先確認權利歸屬**：目前刻意只署個人名、不掛醫院名。
+- Google Doc（專案總覽）無法用 Drive 連接器修改，要改得用 claude-in-chrome 開瀏覽器；在 Docs 裡用座標點擊定位游標容易打偏，輸入前先截圖確認。
+- 待清理：`C:\projects\_osteoporosis_舊OneDrive副本\`（舊工作副本，內容與 GitHub 相同，潘醫師確認後可刪）。
 
 ## 🕐 最後更新
 
-- 時間：2026-07-28 06:10
+- 時間：2026-07-28 06:20
 - 更新者：阿克（Claude Code, Opus 5）@ DESKTOP-LVSV9Q5
 - Git push：✅ 已推
