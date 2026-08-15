@@ -169,6 +169,15 @@
       </div>
 
       <div class="fg">
+        <label class="q">極高風險額外條件
+          <span class="hint">（依指引，此兩項須已達骨鬆診斷或有骨折史才成立）</span></label>
+        <div class="checks">
+          <label><input type="checkbox" id="gcFx"><span>長期類固醇使用期間發生骨折</span></label>
+          <label><input type="checkbox" id="injFall"><span>近一年有傷害性跌倒（因跌倒受傷或就醫）</span></label>
+        </div>
+      </div>
+
+      <div class="fg">
         <label class="q">其他臨床危險因子　<span class="hint">（可複選）</span></label>
         <div class="checks">
           <label><input type="checkbox" class="rf" value="長期使用糖皮質類固醇"><span>長期糖皮質類固醇</span></label>
@@ -208,13 +217,22 @@
   </div>
 
   <p class="disclaimer">
-    本工具為門診決策輔助，分層門檻依實證概念與教學流程設計，並非硬性診斷標準。<br>
-    實際治療請結合完整臨床判斷、最新指引與健保給付規定。FRAX 治療門檻預設採常用參考值（主要骨鬆性 ≥20%、髖部 ≥3%），請依院內政策調整。
+    本工具為門診決策輔助，並非硬性診斷標準。實際治療請結合完整臨床判斷、藥品說明書與當期健保給付規定。<br>
+    <b>分層依據</b>：2025 台灣成人骨質疏鬆症防治之共識及指引（中華民國骨質疏鬆症學會，114 年 10 月版）；
+    極高風險條件之原始出處為 AACE/ACE 2020 Update；「髖部/椎體骨折合併 T-score ≤ −2.5」出自
+    Endocrine Society 2020 Update。<br>
+    <b>與指引原文的差異（刻意保留，皆為較保守的設定）</b>：
+    ①「近期骨折」指引原文為 <b>12 個月</b>內，本工具採 <b>24 個月</b>；
+    ② T-score 極低指引原文為「低於 −3.0」，本工具採 <b>≤ −3.0</b>；
+    ③ FRAX 極高風險指引原文為 &gt;30%／&gt;4.5%，本工具採 <b>≥30%／≥4.5%</b>。<br>
+    <b>FRAX 門檻</b>：高風險採主要骨鬆性 ≥20%、髖部 ≥3%，此為<b>美國特定門檻</b>（US-adapted FRAX）。
+    台灣指引另列本土門檻（成本效益考量：男／女主要骨鬆性 &gt;12.5%／15.0%、髖部 &gt;6.0%／7.0%），
+    請依院內政策調整。計算時 Location 請選 Taiwan。
   </p>
 
   <footer class="credit">
     <p class="made">製作：<b>潘湘如醫師</b>｜家醫科</p>
-    <p>版本 v1.0（2026-07-28）　·　<a href="https://github.com/philia81301-commits/osteoporosis-clinic/issues" target="_blank" rel="noopener">回報問題或建議</a></p>
+    <p>版本 v1.1（2026-08-15）　·　<a href="https://github.com/philia81301-commits/osteoporosis-clinic/issues" target="_blank" rel="noopener">回報問題或建議</a></p>
     <p>© 2026 潘湘如．本工具採 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hant" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a> 授權：可自由轉貼分享，須署名，禁止商業使用與改作。</p>
     <p class="ai">臨床內容由潘湘如醫師企劃、撰寫並審定；介面與程式實作由 Claude（Claude Code）協助。</p>
   </footer>
@@ -235,21 +253,36 @@ function assess(){
   const fMajor = num('fraxMajor');
   const fHip = num('fraxHip');
   const onTx = val('onTx') === 'yes';
+  const gcFx = $('#gcFx').checked;      // 類固醇使用期間骨折（AACE 2020 R23 第 4 條）
+  const injFall = $('#injFall').checked; // 傷害性跌倒史（同 R23 第 6 條）
   const rfs = Array.from(document.querySelectorAll('.rf:checked')).map(c=>c.value);
 
   const hasFx = fx !== 'none';
   const reasons = [];
 
+  /* AACE 2020 R23／TOA 2025 p.16 的極高風險七條，是在「已診斷骨質疏鬆症」的
+     病人裡再細分，不是獨立成立的判準。跌倒史若不設這道門檻，
+     T-score -1.2、無骨折、只是跌倒擦傷的人也會被判成極高風險。 */
+  const hasOsteoporosis = (t!==null && t<=-2.5) || hasFx;
+
   // ---- FRAX 門檻（可依院內調整）----
+  // 高風險 20%/3% 為美國特定門檻；極高風險 30%/4.5% 出自 AACE 2020 R23。
+  // 指引原文為 >30%／>4.5%，此處採 >= 為保守設定（見頁尾說明）。
   const fraxHigh = (fMajor!==null && fMajor>=20) || (fHip!==null && fHip>=3);
+  const fraxVeryHigh = (fMajor!==null && fMajor>=30) || (fHip!==null && fHip>=4.5);
 
   // ---- 極高風險 ----
   let level = null;
   if (fx === 'multi') { level='vhigh'; reasons.push('多發性脆弱性骨折'); }
   else if (onTx) { level='vhigh'; reasons.push('治療期間仍再發生骨折'); }
+  else if (gcFx && hasFx) { level='vhigh'; reasons.push('長期類固醇使用期間發生骨折'); }
   else if (hasFx && recent) { level='vhigh'; reasons.push('近 2 年內發生脆弱性骨折'); }
   else if (t!==null && t<=-3.0) { level='vhigh'; reasons.push('T-score ≤ -3.0（骨密度極低）'); }
   else if ((fx==='hipvert') && t!==null && t<=-2.5) { level='vhigh'; reasons.push('髖部/椎體脆弱性骨折合併 T-score ≤ -2.5'); }
+  else if (fraxVeryHigh) { level='vhigh'; reasons.push('FRAX 骨折風險極高'
+      + (fMajor!==null&&fMajor>=30?`（主要骨鬆性 ${fMajor}% ≥30%）`:'')
+      + (fHip!==null&&fHip>=4.5?`（髖部 ${fHip}% ≥4.5%）`:'')); }
+  else if (injFall && hasOsteoporosis) { level='vhigh'; reasons.push('已達骨鬆診斷且近一年有傷害性跌倒'); }
 
   // ---- 高風險 ----
   if (!level){
@@ -371,6 +404,8 @@ function resetForm(){
   document.querySelector('input[name=fx][value=none]').checked=true;
   document.querySelector('input[name=recent][value=no]').checked=true;
   document.querySelector('input[name=onTx][value=no]').checked=true;
+  $('#gcFx').checked=false;
+  $('#injFall').checked=false;
   assess();
 }
 

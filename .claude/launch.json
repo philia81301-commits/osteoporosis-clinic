@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "osteo-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8766", "--directory", "C:\\projects\\osteoporosis-clinic"],
+      "port": 8766
+    }
+  ]
+}
